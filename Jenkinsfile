@@ -32,24 +32,24 @@ pipeline {
                 }
             }
         }
-    }
-    
-    post {
-        success {
-            script {
-                // Prompt the user
-                def userInput = input(
-                    id: 'userInput',
-                    message: 'Do you want to remove the deployment?',
-                    parameters: [boolean(defaultValue: false, description: 'Proceed with deployment removal?')]
-                )
-                if (userInput) {
-                    // Remove deployment
-                    withKubeConfig([credentialsId: 'K8S', serverUrl: '']) {
-                        sh('kubectl delete -f deployment.yaml')
+
+        stage('Ask for deployment removal') {
+            steps {
+                script {
+                    // Prompt the user
+                    def userInput = input(
+                        id: 'userInput',
+                        message: 'Do you want to remove the deployment?',
+                        parameters: [boolean(defaultValue: false, description: 'Proceed with deployment removal?')]
+                    )
+                    if (userInput) {
+                        // Remove deployment
+                        withKubeConfig([credentialsId: 'K8S', serverUrl: '']) {
+                            sh('kubectl delete -f deployment.yaml')
+                        }
+                    } else {
+                        echo 'Deployment removal cancelled.'
                     }
-                } else {
-                    echo 'Deployment removal cancelled.'
                 }
             }
         }
