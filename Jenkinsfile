@@ -5,8 +5,6 @@ pipeline {
     }
    
     stages {
-        stage('Cloning Git') {
-                // Building Docker images
             stage('Building image') {
               steps{
                 script {
@@ -25,14 +23,14 @@ pipeline {
                 }
               }
 
-       stage('K8S Deploy') {
-        steps{   
-            script {
-                withKubeConfig([credentialsId: 'K8S', serverUrl: '']) {
-                sh ('kubectl apply -f  eks-deploy-k8s.yaml')
-                }
-            }
-        }
-       }
+           //stage('K8S Deploy') {
+            //steps{   
+                //script {
+                    //withKubeConfig([credentialsId: 'K8S', serverUrl: '']) {
+                    //sh ('kubectl apply -f  eks-deploy-k8s.yaml')
+                    //}
+                //}
+        //}
+       //}
     }
 }
