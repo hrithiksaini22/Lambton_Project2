@@ -32,7 +32,7 @@ pipeline {
                 }
         }
        }
-        post {
+    post {
         success {
             script {
                 // Prompt the user
