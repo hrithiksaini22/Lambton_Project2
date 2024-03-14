@@ -28,7 +28,7 @@ pipeline {
                 script {
                     withKubeConfig([credentialsId: 'K8S', serverUrl: '']) {
                         sh ('kubectl apply -f  deployment.yaml')
-                        sh sleep 120 
+                        sh ('sleep 120')
                         sh ('kubectl delete -f  deployment.yaml')
                     }
                 }
