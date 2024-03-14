@@ -39,9 +39,9 @@ pipeline {
             script {
                 // Prompt the user
                 def userInput = input(
+                    id: 'userInput',
                     message: 'Do you want to remove the deployment?',
-                    ok: 'Yes',
-                    parameters: [booleanParam(defaultValue: false, description: 'Proceed with deployment removal?')]
+                    parameters: [boolean(defaultValue: false, description: 'Proceed with deployment removal?')]
                 )
                 if (userInput) {
                     // Remove deployment
