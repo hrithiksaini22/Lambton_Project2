@@ -27,6 +27,6 @@ spec:
     spec:
       containers:
         - name: todolistapp-container
-          image: hrtithik9876789/app:1.0
+          image: 074465317714.dkr.ecr.us-east-1.amazonaws.com/test1:latest
           ports:
             - containerPort: 3000
