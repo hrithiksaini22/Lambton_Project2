@@ -1,0 +1,2852 @@
+<!DOCTYPE html>
+<html class='v2' dir='ltr' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+<link href='https://www.blogger.com/static/v1/widgets/3566091532-css_bundle_v2.css' rel='stylesheet' type='text/css'/>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async='async' src='https://www.googletagmanager.com/gtag/js?id=UA-116463360-1'></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-116463360-1');
+</script>
+<meta content='width=1100' name='viewport'/>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<meta content='blogger' name='generator'/>
+<link href='https://www.coachdevops.com/favicon.ico' rel='icon' type='image/x-icon'/>
+<link href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html' rel='canonical'/>
+<link rel="alternate" type="application/atom+xml" title="Coaching on DevOps and Cloud Computing - Atom" href="https://www.coachdevops.com/feeds/posts/default" />
+<link rel="alternate" type="application/rss+xml" title="Coaching on DevOps and Cloud Computing - RSS" href="https://www.coachdevops.com/feeds/posts/default?alt=rss" />
+<link rel="service.post" type="application/atom+xml" title="Coaching on DevOps and Cloud Computing - Atom" href="https://www.blogger.com/feeds/1470536021193321646/posts/default" />
+
+<link rel="alternate" type="application/atom+xml" title="Coaching on DevOps and Cloud Computing - Atom" href="https://www.coachdevops.com/feeds/7325465026216084230/comments/default" />
+<!--Can't find substitution for tag [blog.ieCssRetrofitLinks]-->
+<link href='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/s320/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png' rel='image_src'/>
+<meta content='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html' property='og:url'/>
+<meta content='Deploy Springboot Microservices App into Amazon EKS Cluster using Jenkins Pipeline and Kubectl CLI Plug-in | Containerize Springboot App and Deploy into EKS Cluster using Jenkins Pipeline' property='og:title'/>
+<meta content='We will learn how to automate springboot microservices builds using Jenkins pipeline and Deploy into AWS EKS Cluster with help of Kubernetes...' property='og:description'/>
+<meta content='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/w1200-h630-p-k-no-nu/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png' property='og:image'/>
+<title>Coaching on DevOps and Cloud Computing: Deploy Springboot Microservices App into Amazon EKS Cluster using Jenkins Pipeline and Kubectl CLI Plug-in | Containerize Springboot App and Deploy into EKS Cluster using Jenkins Pipeline</title>
+<style id='page-skin-1' type='text/css'><!--
+/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Simple
+Designer: Blogger
+URL:      www.blogger.com
+----------------------------------------------- */
+/* Variable definitions
+====================
+<Variable name="keycolor" description="Main Color" type="color" default="#66bbdd"/>
+<Group description="Page Text" selector="body">
+<Variable name="body.font" description="Font" type="font"
+default="normal normal 12px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="body.text.color" description="Text Color" type="color" default="#222222"/>
+</Group>
+<Group description="Backgrounds" selector=".body-fauxcolumns-outer">
+<Variable name="body.background.color" description="Outer Background" type="color" default="#66bbdd"/>
+<Variable name="content.background.color" description="Main Background" type="color" default="#ffffff"/>
+<Variable name="header.background.color" description="Header Background" type="color" default="transparent"/>
+</Group>
+<Group description="Links" selector=".main-outer">
+<Variable name="link.color" description="Link Color" type="color" default="#2288bb"/>
+<Variable name="link.visited.color" description="Visited Color" type="color" default="#888888"/>
+<Variable name="link.hover.color" description="Hover Color" type="color" default="#33aaff"/>
+</Group>
+<Group description="Blog Title" selector=".header h1">
+<Variable name="header.font" description="Font" type="font"
+default="normal normal 60px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="header.text.color" description="Title Color" type="color" default="#3399bb" />
+</Group>
+<Group description="Blog Description" selector=".header .description">
+<Variable name="description.text.color" description="Description Color" type="color"
+default="#777777" />
+</Group>
+<Group description="Tabs Text" selector=".tabs-inner .widget li a">
+<Variable name="tabs.font" description="Font" type="font"
+default="normal normal 14px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="tabs.text.color" description="Text Color" type="color" default="#999999"/>
+<Variable name="tabs.selected.text.color" description="Selected Color" type="color" default="#000000"/>
+</Group>
+<Group description="Tabs Background" selector=".tabs-outer .PageList">
+<Variable name="tabs.background.color" description="Background Color" type="color" default="#f5f5f5"/>
+<Variable name="tabs.selected.background.color" description="Selected Color" type="color" default="#eeeeee"/>
+</Group>
+<Group description="Post Title" selector="h3.post-title, .comments h4">
+<Variable name="post.title.font" description="Font" type="font"
+default="normal normal 22px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+</Group>
+<Group description="Date Header" selector=".date-header">
+<Variable name="date.header.color" description="Text Color" type="color"
+default="#222222"/>
+<Variable name="date.header.background.color" description="Background Color" type="color"
+default="transparent"/>
+<Variable name="date.header.font" description="Text Font" type="font"
+default="normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="date.header.padding" description="Date Header Padding" type="string" default="inherit"/>
+<Variable name="date.header.letterspacing" description="Date Header Letter Spacing" type="string" default="inherit"/>
+<Variable name="date.header.margin" description="Date Header Margin" type="string" default="inherit"/>
+</Group>
+<Group description="Post Footer" selector=".post-footer">
+<Variable name="post.footer.text.color" description="Text Color" type="color" default="#666666"/>
+<Variable name="post.footer.background.color" description="Background Color" type="color"
+default="#f9f9f9"/>
+<Variable name="post.footer.border.color" description="Shadow Color" type="color" default="#eeeeee"/>
+</Group>
+<Group description="Gadgets" selector="h2">
+<Variable name="widget.title.font" description="Title Font" type="font"
+default="normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="widget.title.text.color" description="Title Color" type="color" default="#000000"/>
+<Variable name="widget.alternate.text.color" description="Alternate Color" type="color" default="#999999"/>
+</Group>
+<Group description="Images" selector=".main-inner">
+<Variable name="image.background.color" description="Background Color" type="color" default="#ffffff"/>
+<Variable name="image.border.color" description="Border Color" type="color" default="#eeeeee"/>
+<Variable name="image.text.color" description="Caption Text Color" type="color" default="#222222"/>
+</Group>
+<Group description="Accents" selector=".content-inner">
+<Variable name="body.rule.color" description="Separator Line Color" type="color" default="#eeeeee"/>
+<Variable name="tabs.border.color" description="Tabs Border Color" type="color" default="#eeeeee"/>
+</Group>
+<Variable name="body.background" description="Body Background" type="background"
+color="#eeaa00" default="$(color) none repeat scroll top left"/>
+<Variable name="body.background.override" description="Body Background Override" type="string" default=""/>
+<Variable name="body.background.gradient.cap" description="Body Gradient Cap" type="url"
+default="url(https://resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png)"/>
+<Variable name="body.background.gradient.tile" description="Body Gradient Tile" type="url"
+default="url(https://resources.blogblog.com/blogblog/data/1kt/simple/body_gradient_tile_light.png)"/>
+<Variable name="content.background.color.selector" description="Content Background Color Selector" type="string" default=".content-inner"/>
+<Variable name="content.padding" description="Content Padding" type="length" default="10px" min="0" max="100px"/>
+<Variable name="content.padding.horizontal" description="Content Horizontal Padding" type="length" default="10px" min="0" max="100px"/>
+<Variable name="content.shadow.spread" description="Content Shadow Spread" type="length" default="40px" min="0" max="100px"/>
+<Variable name="content.shadow.spread.webkit" description="Content Shadow Spread (WebKit)" type="length" default="5px" min="0" max="100px"/>
+<Variable name="content.shadow.spread.ie" description="Content Shadow Spread (IE)" type="length" default="10px" min="0" max="100px"/>
+<Variable name="main.border.width" description="Main Border Width" type="length" default="0" min="0" max="10px"/>
+<Variable name="header.background.gradient" description="Header Gradient" type="url" default="none"/>
+<Variable name="header.shadow.offset.left" description="Header Shadow Offset Left" type="length" default="-1px" min="-50px" max="50px"/>
+<Variable name="header.shadow.offset.top" description="Header Shadow Offset Top" type="length" default="-1px" min="-50px" max="50px"/>
+<Variable name="header.shadow.spread" description="Header Shadow Spread" type="length" default="1px" min="0" max="100px"/>
+<Variable name="header.padding" description="Header Padding" type="length" default="30px" min="0" max="100px"/>
+<Variable name="header.border.size" description="Header Border Size" type="length" default="1px" min="0" max="10px"/>
+<Variable name="header.bottom.border.size" description="Header Bottom Border Size" type="length" default="0" min="0" max="10px"/>
+<Variable name="header.border.horizontalsize" description="Header Horizontal Border Size" type="length" default="0" min="0" max="10px"/>
+<Variable name="description.text.size" description="Description Text Size" type="string" default="140%"/>
+<Variable name="tabs.margin.top" description="Tabs Margin Top" type="length" default="0" min="0" max="100px"/>
+<Variable name="tabs.margin.side" description="Tabs Side Margin" type="length" default="30px" min="0" max="100px"/>
+<Variable name="tabs.background.gradient" description="Tabs Background Gradient" type="url"
+default="url(https://resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png)"/>
+<Variable name="tabs.border.width" description="Tabs Border Width" type="length" default="1px" min="0" max="10px"/>
+<Variable name="tabs.bevel.border.width" description="Tabs Bevel Border Width" type="length" default="1px" min="0" max="10px"/>
+<Variable name="post.margin.bottom" description="Post Bottom Margin" type="length" default="25px" min="0" max="100px"/>
+<Variable name="image.border.small.size" description="Image Border Small Size" type="length" default="2px" min="0" max="10px"/>
+<Variable name="image.border.large.size" description="Image Border Large Size" type="length" default="5px" min="0" max="10px"/>
+<Variable name="page.width.selector" description="Page Width Selector" type="string" default=".region-inner"/>
+<Variable name="page.width" description="Page Width" type="string" default="auto"/>
+<Variable name="main.section.margin" description="Main Section Margin" type="length" default="15px" min="0" max="100px"/>
+<Variable name="main.padding" description="Main Padding" type="length" default="15px" min="0" max="100px"/>
+<Variable name="main.padding.top" description="Main Padding Top" type="length" default="30px" min="0" max="100px"/>
+<Variable name="main.padding.bottom" description="Main Padding Bottom" type="length" default="30px" min="0" max="100px"/>
+<Variable name="paging.background"
+color="#ffffff"
+description="Background of blog paging area" type="background"
+default="transparent none no-repeat scroll top center"/>
+<Variable name="footer.bevel" description="Bevel border length of footer" type="length" default="0" min="0" max="10px"/>
+<Variable name="mobile.background.overlay" description="Mobile Background Overlay" type="string"
+default="transparent none repeat scroll top left"/>
+<Variable name="mobile.background.size" description="Mobile Background Size" type="string" default="auto"/>
+<Variable name="mobile.button.color" description="Mobile Button Color" type="color" default="#ffffff" />
+<Variable name="startSide" description="Side where text starts in blog language" type="automatic" default="left"/>
+<Variable name="endSide" description="Side where text ends in blog language" type="automatic" default="right"/>
+*/
+/* Content
+----------------------------------------------- */
+body {
+font: normal normal 12px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #222222;
+background: #eeaa00 none repeat scroll top left;
+padding: 0 40px 40px 40px;
+}
+html body .region-inner {
+min-width: 0;
+max-width: 100%;
+width: auto;
+}
+h2 {
+font-size: 22px;
+}
+a:link {
+text-decoration:none;
+color: #cc6611;
+}
+a:visited {
+text-decoration:none;
+color: #888888;
+}
+a:hover {
+text-decoration:underline;
+color: #ff9900;
+}
+.body-fauxcolumn-outer .fauxcolumn-inner {
+background: transparent url(https://resources.blogblog.com/blogblog/data/1kt/simple/body_gradient_tile_light.png) repeat scroll top left;
+_background-image: none;
+}
+.body-fauxcolumn-outer .cap-top {
+position: absolute;
+z-index: 1;
+height: 400px;
+width: 100%;
+}
+.body-fauxcolumn-outer .cap-top .cap-left {
+width: 100%;
+background: transparent url(https://resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll top left;
+_background-image: none;
+}
+.content-outer {
+-moz-box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 10px #333333;
+box-shadow: 0 0 40px rgba(0, 0, 0, .15);
+margin-bottom: 1px;
+}
+.content-inner {
+padding: 10px 10px;
+}
+.content-inner {
+background-color: #ffffff;
+}
+/* Header
+----------------------------------------------- */
+.header-outer {
+background: #cc6611 url(https://resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll 0 -400px;
+_background-image: none;
+}
+.Header h1 {
+font: normal normal 60px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #ffffff;
+text-shadow: 1px 2px 3px rgba(0, 0, 0, .2);
+}
+.Header h1 a {
+color: #ffffff;
+}
+.Header .description {
+font-size: 140%;
+color: #ffffff;
+}
+.header-inner .Header .titlewrapper {
+padding: 22px 30px;
+}
+.header-inner .Header .descriptionwrapper {
+padding: 0 30px;
+}
+/* Tabs
+----------------------------------------------- */
+.tabs-inner .section:first-child {
+border-top: 0 solid #eeeeee;
+}
+.tabs-inner .section:first-child ul {
+margin-top: -0;
+border-top: 0 solid #eeeeee;
+border-left: 0 solid #eeeeee;
+border-right: 0 solid #eeeeee;
+}
+.tabs-inner .widget ul {
+background: #f5f5f5 url(https://resources.blogblog.com/blogblog/data/1kt/simple/gradients_light.png) repeat-x scroll 0 -800px;
+_background-image: none;
+border-bottom: 1px solid #eeeeee;
+margin-top: 0;
+margin-left: -30px;
+margin-right: -30px;
+}
+.tabs-inner .widget li a {
+display: inline-block;
+padding: .6em 1em;
+font: normal normal 14px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #999999;
+border-left: 1px solid #ffffff;
+border-right: 1px solid #eeeeee;
+}
+.tabs-inner .widget li:first-child a {
+border-left: none;
+}
+.tabs-inner .widget li.selected a, .tabs-inner .widget li a:hover {
+color: #000000;
+background-color: #eeeeee;
+text-decoration: none;
+}
+/* Columns
+----------------------------------------------- */
+.main-outer {
+border-top: 0 solid #eeeeee;
+}
+.fauxcolumn-left-outer .fauxcolumn-inner {
+border-right: 1px solid #eeeeee;
+}
+.fauxcolumn-right-outer .fauxcolumn-inner {
+border-left: 1px solid #eeeeee;
+}
+/* Headings
+----------------------------------------------- */
+div.widget > h2,
+div.widget h2.title {
+margin: 0 0 1em 0;
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #000000;
+}
+/* Widgets
+----------------------------------------------- */
+.widget .zippy {
+color: #999999;
+text-shadow: 2px 2px 1px rgba(0, 0, 0, .1);
+}
+.widget .popular-posts ul {
+list-style: none;
+}
+/* Posts
+----------------------------------------------- */
+h2.date-header {
+font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+}
+.date-header span {
+background-color: transparent;
+color: #222222;
+padding: inherit;
+letter-spacing: inherit;
+margin: inherit;
+}
+.main-inner {
+padding-top: 30px;
+padding-bottom: 30px;
+}
+.main-inner .column-center-inner {
+padding: 0 15px;
+}
+.main-inner .column-center-inner .section {
+margin: 0 15px;
+}
+.post {
+margin: 0 0 25px 0;
+}
+h3.post-title, .comments h4 {
+font: normal normal 22px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+margin: .75em 0 0;
+}
+.post-body {
+font-size: 110%;
+line-height: 1.4;
+position: relative;
+}
+.post-body img, .post-body .tr-caption-container, .Profile img, .Image img,
+.BlogList .item-thumbnail img {
+padding: 2px;
+background: #ffffff;
+border: 1px solid #eeeeee;
+-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+}
+.post-body img, .post-body .tr-caption-container {
+padding: 5px;
+}
+.post-body .tr-caption-container {
+color: #222222;
+}
+.post-body .tr-caption-container img {
+padding: 0;
+background: transparent;
+border: none;
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+box-shadow: 0 0 0 rgba(0, 0, 0, .1);
+}
+.post-header {
+margin: 0 0 1.5em;
+line-height: 1.6;
+font-size: 90%;
+}
+.post-footer {
+margin: 20px -2px 0;
+padding: 5px 10px;
+color: #666666;
+background-color: #f9f9f9;
+border-bottom: 1px solid #eeeeee;
+line-height: 1.6;
+font-size: 90%;
+}
+#comments .comment-author {
+padding-top: 1.5em;
+border-top: 1px solid #eeeeee;
+background-position: 0 1.5em;
+}
+#comments .comment-author:first-child {
+padding-top: 0;
+border-top: none;
+}
+.avatar-image-container {
+margin: .2em 0 0;
+}
+#comments .avatar-image-container img {
+border: 1px solid #eeeeee;
+}
+/* Comments
+----------------------------------------------- */
+.comments .comments-content .icon.blog-author {
+background-repeat: no-repeat;
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9sLFwMeCjjhcOMAAAD+SURBVDjLtZSvTgNBEIe/WRRnm3U8RC1neQdsm1zSBIU9VVF1FkUguQQsD9ITmD7ECZIJSE4OZo9stoVjC/zc7ky+zH9hXwVwDpTAWWLrgS3QAe8AZgaAJI5zYAmc8r0G4AHYHQKVwII8PZrZFsBFkeRCABYiMh9BRUhnSkPTNCtVXYXURi1FpBDgArj8QU1eVXUzfnjv7yP7kwu1mYrkWlU33vs1QNu2qU8pwN0UpKoqokjWwCztrMuBhEhmh8bD5UDqur75asbcX0BGUB9/HAMB+r32hznJgXy2v0sGLBcyAJ1EK3LFcbo1s91JeLwAbwGYu7TP/3ZGfnXYPgAVNngtqatUNgAAAABJRU5ErkJggg==);
+}
+.comments .comments-content .loadmore a {
+border-top: 1px solid #999999;
+border-bottom: 1px solid #999999;
+}
+.comments .comment-thread.inline-thread {
+background-color: #f9f9f9;
+}
+.comments .continue {
+border-top: 2px solid #999999;
+}
+/* Accents
+---------------------------------------------- */
+.section-columns td.columns-cell {
+border-left: 1px solid #eeeeee;
+}
+.blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.blog-pager-older-link, .home-link,
+.blog-pager-newer-link {
+background-color: #ffffff;
+padding: 5px;
+}
+.footer-outer {
+border-top: 0 dashed #bbbbbb;
+}
+/* Mobile
+----------------------------------------------- */
+body.mobile  {
+background-size: auto;
+}
+.mobile .body-fauxcolumn-outer {
+background: transparent none repeat scroll top left;
+}
+.mobile .body-fauxcolumn-outer .cap-top {
+background-size: 100% auto;
+}
+.mobile .content-outer {
+-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+}
+.mobile .tabs-inner .widget ul {
+margin-left: 0;
+margin-right: 0;
+}
+.mobile .post {
+margin: 0;
+}
+.mobile .main-inner .column-center-inner .section {
+margin: 0;
+}
+.mobile .date-header span {
+padding: 0.1em 10px;
+margin: 0 -10px;
+}
+.mobile h3.post-title {
+margin: 0;
+}
+.mobile .blog-pager {
+background: transparent none no-repeat scroll top center;
+}
+.mobile .footer-outer {
+border-top: none;
+}
+.mobile .main-inner, .mobile .footer-inner {
+background-color: #ffffff;
+}
+.mobile-index-contents {
+color: #222222;
+}
+.mobile-link-button {
+background-color: #cc6611;
+}
+.mobile-link-button a:link, .mobile-link-button a:visited {
+color: #ffffff;
+}
+.mobile .tabs-inner .section:first-child {
+border-top: none;
+}
+.mobile .tabs-inner .PageList .widget-content {
+background-color: #eeeeee;
+color: #000000;
+border-top: 1px solid #eeeeee;
+border-bottom: 1px solid #eeeeee;
+}
+.mobile .tabs-inner .PageList .widget-content .pagelist-arrow {
+border-left: 1px solid #eeeeee;
+}
+
+--></style>
+<style id='template-skin-1' type='text/css'><!--
+body {
+min-width: 960px;
+}
+.content-outer, .content-fauxcolumn-outer, .region-inner {
+min-width: 960px;
+max-width: 960px;
+_width: 960px;
+}
+.main-inner .columns {
+padding-left: 0;
+padding-right: 310px;
+}
+.main-inner .fauxcolumn-center-outer {
+left: 0;
+right: 310px;
+/* IE6 does not respect left and right together */
+_width: expression(this.parentNode.offsetWidth -
+parseInt("0") -
+parseInt("310px") + 'px');
+}
+.main-inner .fauxcolumn-left-outer {
+width: 0;
+}
+.main-inner .fauxcolumn-right-outer {
+width: 310px;
+}
+.main-inner .column-left-outer {
+width: 0;
+right: 100%;
+margin-left: -0;
+}
+.main-inner .column-right-outer {
+width: 310px;
+margin-right: -310px;
+}
+#layout {
+min-width: 0;
+}
+#layout .content-outer {
+min-width: 0;
+width: 800px;
+}
+#layout .region-inner {
+min-width: 0;
+width: auto;
+}
+body#layout div.add_widget {
+padding: 8px;
+}
+body#layout div.add_widget a {
+margin-left: 32px;
+}
+--></style>
+<script type='text/javascript'>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-116463360-1', 'auto', 'blogger');
+        ga('blogger.send', 'pageview');
+      </script>
+<link href='https://www.blogger.com/dyn-css/authorization.css?targetBlogID=1470536021193321646&amp;zx=770ed17c-a221-4d6a-b4d5-b9cd01f36349' media='none' onload='if(media!=&#39;all&#39;)media=&#39;all&#39;' rel='stylesheet'/><noscript><link href='https://www.blogger.com/dyn-css/authorization.css?targetBlogID=1470536021193321646&amp;zx=770ed17c-a221-4d6a-b4d5-b9cd01f36349' rel='stylesheet'/></noscript>
+<meta name='google-adsense-platform-account' content='ca-host-pub-1556223355139109'/>
+<meta name='google-adsense-platform-domain' content='blogspot.com'/>
+
+<!-- data-ad-client=ca-pub-1222349908741615 -->
+
+</head>
+<body class='loading'>
+<div class='navbar section' id='navbar' name='Navbar'><div class='widget Navbar' data-version='1' id='Navbar1'><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener('load',
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<div id="navbar-iframe-container"></div>
+<script type="text/javascript" src="https://apis.google.com/js/platform.js"></script>
+<script type="text/javascript">
+      gapi.load("gapi.iframes:gapi.iframes.style.bubble", function() {
+        if (gapi.iframes && gapi.iframes.getContext) {
+          gapi.iframes.getContext().openChild({
+              url: 'https://www.blogger.com/navbar.g?targetBlogID\x3d1470536021193321646\x26blogName\x3dCoaching+on+DevOps+and+Cloud+Computing\x26publishMode\x3dPUBLISH_MODE_HOSTED\x26navbarType\x3dLIGHT\x26layoutType\x3dLAYOUTS\x26searchRoot\x3dhttps://www.coachdevops.com/search\x26blogLocale\x3den\x26v\x3d2\x26homepageUrl\x3dhttps://www.coachdevops.com/\x26targetPostID\x3d7325465026216084230\x26blogPostOrPageUrl\x3dhttps://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html\x26vt\x3d4060706261260226939',
+              where: document.getElementById("navbar-iframe-container"),
+              id: "navbar-iframe"
+          });
+        }
+      });
+    </script><script type="text/javascript">
+(function() {
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = '//pagead2.googlesyndication.com/pagead/js/google_top_exp.js';
+var head = document.getElementsByTagName('head')[0];
+if (head) {
+head.appendChild(script);
+}})();
+</script>
+</div></div>
+<div class='body-fauxcolumns'>
+<div class='fauxcolumn-outer body-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content'>
+<div class='content-fauxcolumns'>
+<div class='fauxcolumn-outer content-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content-outer'>
+<div class='content-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left content-fauxborder-left'>
+<div class='fauxborder-right content-fauxborder-right'></div>
+<div class='content-inner'>
+<header>
+<div class='header-outer'>
+<div class='header-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left header-fauxborder-left'>
+<div class='fauxborder-right header-fauxborder-right'></div>
+<div class='region-inner header-inner'>
+<div class='header section' id='header' name='Header'><div class='widget Header' data-version='1' id='Header1'>
+<div id='header-inner'>
+<div class='titlewrapper'>
+<h1 class='title'>
+<a href='https://www.coachdevops.com/'>
+Coaching on DevOps and Cloud Computing
+</a>
+</h1>
+</div>
+<div class='descriptionwrapper'>
+<p class='description'><span>Hands on DevOps Coaching provided on AWS and Azure Cloud platforms. please contact at devops.coaching@gmail.com for more info. You can also directly reach out to Coach AK at +1(469) 733-5248</span></p>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='header-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</header>
+<div class='tabs-outer'>
+<div class='tabs-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left tabs-fauxborder-left'>
+<div class='fauxborder-right tabs-fauxborder-right'></div>
+<div class='region-inner tabs-inner'>
+<div class='tabs section' id='crosscol' name='Cross-Column'><div class='widget AdSense' data-version='1' id='AdSense1'>
+<div class='widget-content'>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1222349908741615&host=ca-host-pub-1556223355139109" crossorigin="anonymous"></script>
+<!-- devopscoaching_crosscol_AdSense1_728x90_as -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-1222349908741615"
+     data-ad-host="ca-host-pub-1556223355139109"
+     data-ad-slot="4081234670"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div class='clear'></div>
+</div>
+</div></div>
+<div class='tabs no-items section' id='crosscol-overflow' name='Cross-Column 2'></div>
+</div>
+</div>
+<div class='tabs-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='main-outer'>
+<div class='main-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left main-fauxborder-left'>
+<div class='fauxborder-right main-fauxborder-right'></div>
+<div class='region-inner main-inner'>
+<div class='columns fauxcolumns'>
+<div class='fauxcolumn-outer fauxcolumn-center-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-left-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-right-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<!-- corrects IE6 width calculation -->
+<div class='columns-inner'>
+<div class='column-center-outer'>
+<div class='column-center-inner'>
+<div class='main section' id='main' name='Main'><div class='widget Blog' data-version='1' id='Blog1'>
+<div class='blog-posts hfeed'>
+
+          <div class="date-outer">
+        
+<h2 class='date-header'><span>Tuesday, January 11, 2022</span></h2>
+
+          <div class="date-posts">
+        
+<div class='post-outer'>
+<div class='post hentry uncustomized-post-template' itemprop='blogPost' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+<meta content='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/s320/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png' itemprop='image_url'/>
+<meta content='1470536021193321646' itemprop='blogId'/>
+<meta content='7325465026216084230' itemprop='postId'/>
+<a name='7325465026216084230'></a>
+<h3 class='post-title entry-title' itemprop='name'>
+Deploy Springboot Microservices App into Amazon EKS Cluster using Jenkins Pipeline and Kubectl CLI Plug-in | Containerize Springboot App and Deploy into EKS Cluster using Jenkins Pipeline
+</h3>
+<div class='post-header'>
+<div class='post-header-line-1'></div>
+</div>
+<div class='post-body entry-content' id='post-body-7325465026216084230' itemprop='description articleBody'>
+<p><span style="font-size: small;">We will learn how to automate springboot microservices builds using Jenkins pipeline and Deploy into AWS EKS Cluster with help of Kubernetes&nbsp;</span><span style="font-size: small;">CLI plug-in.</span></p><p><span style="font-size: small;"><span style="color: black; display: inline; float: none;">We will use Springboot Microservices based Java application. I have already created a repo with source code + Dockerfile. The repo also have Jenkinsfile for automating the following:</span></span></p><div dir="ltr" trbidi="on"><div><span style="font-size: small;"><span style="background-color: #fcff01;"><span style="color: black; display: inline; float: none;">- Automating builds using Jenkins</span><br /><span style="color: black; display: inline; float: none;">- Automating Docker image creation</span><br /><span style="color: black; display: inline; float: none;">- Automating Docker image upload into AWS ECR</span><br /><span style="color: black; display: inline; float: none;">- Automating Docker Containers Deployments to Kubernetes Cluster</span></span></span></div><div><span style="font-size: small;">&nbsp;<div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/s899/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="650" data-original-width="899" height="231" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/s320/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png" width="320" /></a></div><br /></span></div><div><div class="separator" style="clear: both; text-align: center;"><br /></div></div><div><span style="font-size: small;"><span style="color: black; display: inline; float: none; font-family: &quot;times&quot;;"><div class="separator" style="clear: both; text-align: center;"><span style="text-align: left;">&nbsp;</span></div></span></span></div><div><span style="font-family: inherit;"><u style="-webkit-text-stroke-width: 0px;"><u style="-webkit-text-stroke-width: 0px;"><b><span style="background-color: yellow;">Watch steps in YouTube channel:</span></b></u><br /></u></span></div>
+  <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/C1BlN66s9yo" title="YouTube video player" width="560"></iframe><div><br /></div><div><b><u>Same Code for this video is here:</u></b></div><div><div class="separator" style="background-color: white; clear: both;"><span style="font-family: inherit;">Make sure you fork my repo&nbsp;<a href="https://github.com/akannan1087/springboot-app" style="text-decoration-line: none;">https://github.com/akannan1087/springboot-app</a></span></div></div><div><br /></div><div><span style="font-family: inherit;"><u style="-webkit-text-stroke-width: 0px;"><b><span style="background-color: yellow;">Pre-requisites:</span></b></u><br /><span style="color: black; display: inline; float: none;">1. Amazon EKS</span><span style="color: black; display: inline; float: none;">&nbsp;Cluster is setup and running. Click&nbsp;<a href="https://www.coachdevops.com/2022/02/create-amazon-eks-cluster-by-eksctl-how.html">here</a>&nbsp;to learn how to create Amazon EKS cluster.<br /></span></span></div><div><span style="font-family: inherit;"><span style="color: black; display: inline; float: none;">2. <a href="https://www.cidevops.com/2020/05/how-to-setup-elastic-container-registry.html">Create ECR repo in AWS</a></span></span></div><div><span style="font-family: inherit;"><span style="color: black; display: inline; float: none; font-size: small;">3.&nbsp;<a href="https://www.coachdevops.com/2020/04/install-jenkins-ubuntu-1804-setup.html">Jenkins Master is up and running</a></span></span></div><div><span style="font-family: inherit;">4. <a href="https://www.coachdevops.com/2020/05/docker-jenkins-integration-building.html" target="_blank">Docker installed on Jenkins instance&nbsp;</a></span></div><div><span style="font-family: inherit;">5. Docker, Docker pipeline and Kubernetes CLI plug-ins are installed in Jenkins</span></div><div><span style="font-family: inherit;"><br /></span></div><span style="font-family: inherit;"><span style="font-size: small;"></span></span><div><div class="separator" style="clear: both; text-align: center;"><span style="font-family: inherit;"><span style="font-size: small;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi98z93_gIbnUqM48Ikr4uVpQyL5sHPJJCbjZLNwEa_S1M2S_fQK5lPiZMt5GVoIBvOUPx-UKlP3eHmSck-25sXoLLP2oS-mCk_hZTd852BS9PiBPfJmOZ_rtMdge3KM0bOp_PVl8vODf4/s920/docker-plugins.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="228" data-original-width="920" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi98z93_gIbnUqM48Ikr4uVpQyL5sHPJJCbjZLNwEa_S1M2S_fQK5lPiZMt5GVoIBvOUPx-UKlP3eHmSck-25sXoLLP2oS-mCk_hZTd852BS9PiBPfJmOZ_rtMdge3KM0bOp_PVl8vODf4/s320/docker-plugins.png" width="320" /></a></span></span></div><div class="separator" style="clear: both; text-align: center;"><br /></div><div style="text-align: center;"><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/a/AVvXsEiNDaWR1hHRZOt6G3OeUZS2EQOoNdthqj18R-kcAudsSwO7--SJ8d22J7ujPg-R5Xq8IIo9bP9XAXoWlp1ze8WB20LWl5mu0-WuPpWIKj6eEYwumv1POeS1Ax1vGVnhd0yMVSHW0DPhULNWI-DfxAk3hOYtdbTnYDozvEg8auvs4XjWGuPj5gWDZSmW=s320" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="187" data-original-width="320" height="187" src="https://blogger.googleusercontent.com/img/a/AVvXsEiNDaWR1hHRZOt6G3OeUZS2EQOoNdthqj18R-kcAudsSwO7--SJ8d22J7ujPg-R5Xq8IIo9bP9XAXoWlp1ze8WB20LWl5mu0-WuPpWIKj6eEYwumv1POeS1Ax1vGVnhd0yMVSHW0DPhULNWI-DfxAk3hOYtdbTnYDozvEg8auvs4XjWGuPj5gWDZSmW" width="320" /></a></div><br /><span style="font-family: inherit;"><br style="-webkit-text-stroke-width: 0px; text-align: left;" /></span></div><span style="font-family: inherit;">6.</span><span style="font-family: inherit;">&nbsp;</span><a href="https://www.coachdevops.com/2020/10/install-kubectl-on-ubuntu-instance-how.html" style="font-family: inherit;">Install kubectl</a><span style="font-family: inherit;">&nbsp;</span><span style="font-family: inherit;">on your instance</span></div><div><br /><b style="font-family: times;"><u><span style="color: black; font-family: &quot;times&quot;; font-weight: 400;"><b><u><b style="-webkit-text-stroke-width: 0px;"><u style="background-color: #fcff01;">Step # 1 - Create Maven3 variable under Global tool configuration in Jenkins</u></b></u></b></span></u></b></div><div><span style="font-size: small;"><div>Make sure you create Maven3 variable under Global tool configuration.&nbsp;</div><div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgk6AXHfhprACqTxUGu4WggU3H9cFAXTnQtYX_Ujc_n3tpjXv0SPJiaj1DRBnKciIFauiy8SzQ8hUsHc9g2lrANjyW-exniumSCbd3NypbJrvNiADPoULyDauS_oitI89JKRCJA4dhznkAM/s968/maven3.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="608" data-original-width="968" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgk6AXHfhprACqTxUGu4WggU3H9cFAXTnQtYX_Ujc_n3tpjXv0SPJiaj1DRBnKciIFauiy8SzQ8hUsHc9g2lrANjyW-exniumSCbd3NypbJrvNiADPoULyDauS_oitI89JKRCJA4dhznkAM/s320/maven3.png" width="320" /><br /></a></div></div></span></div><span style="font-size: small;"></span><div><br /></div><div><span style="background-color: yellow; color: black; font-family: &quot;times&quot;; font-size: medium;"><b><u><b style="-webkit-text-stroke-width: 0px; font-size: medium;"><u>Step #2 -&nbsp;Create Credentials for connecting to Kubernetes Cluster using kubeconfig</u></b></u></b></span></div><div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;">Click on Add Credentials, use Kubernetes configuration from drop down.</div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times; text-align: center;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg5iRYT1XRxmLNdOlwugBq2MUq2AzX0Pi2nEpXGTtTS95Wbm7E5iSrX0TyYvCf4EBx0TCpVa7PYu6iPDOZbePec8i2PY02M4XhWSeFCOubeYj2-NmWK4SeQ5VgM9MUyz6SsdWvtQXwxKgA/s1600/add.png" style="margin-left: 1em; margin-right: 1em; text-align: left;"><img border="0" data-original-height="572" data-original-width="1084" height="168" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg5iRYT1XRxmLNdOlwugBq2MUq2AzX0Pi2nEpXGTtTS95Wbm7E5iSrX0TyYvCf4EBx0TCpVa7PYu6iPDOZbePec8i2PY02M4XhWSeFCOubeYj2-NmWK4SeQ5VgM9MUyz6SsdWvtQXwxKgA/s320/add.png" width="320" /></a></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><div>use secret file from drop down.<br style="-webkit-text-stroke-width: 0px;" /><div class="separator" style="clear: both; text-align: center;"><br /></div></div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/a/AVvXsEj87Lftt4azdQg8eugpMj1YAmu9XoNC-oJsqMr5AHJMOL_dFGqIw5fzADKTocJ-E-u9KMnaDW8lrA431jm_mq0Z9R9zBRxiwIFAIuSyDGkVclUr-UnL1Bpt_O0fymsuV9GwbYyJdGLG1BPRpK8QmqZsyT6x_2CpIioRt5I3Z_-rv5jPInF49tXsjghaIw=s834" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="618" data-original-width="834" height="237" src="https://blogger.googleusercontent.com/img/a/AVvXsEj87Lftt4azdQg8eugpMj1YAmu9XoNC-oJsqMr5AHJMOL_dFGqIw5fzADKTocJ-E-u9KMnaDW8lrA431jm_mq0Z9R9zBRxiwIFAIuSyDGkVclUr-UnL1Bpt_O0fymsuV9GwbYyJdGLG1BPRpK8QmqZsyT6x_2CpIioRt5I3Z_-rv5jPInF49tXsjghaIw=s320" width="320" /></a></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both;"><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: Times;"><div><span style="background-color: white; color: black; font-family: &quot;times&quot;; font-size: medium;">execute the below command to login as jenkins user.</span></div><div><span style="background-color: yellow; color: black; font-family: &quot;times&quot;;">sudo su - jenkins</span></div><div><span style="background-color: yellow; color: black; font-family: &quot;times&quot;; font-size: medium;"><br /></span></div><div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both;"><span style="color: black; font-family: &quot;times&quot;; font-size: medium;">you should see the nodes running in EKS cluster.</span></div><div class="separator" style="clear: both; text-align: center;"><br style="background-color: yellow;" /></div></div><div><span style="background-color: yellow; font-family: inherit;">kubectl get nodes</span></div><div><span style="background-color: yellow; font-family: inherit;"><br /></span></div><div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWKwQKkodHDUTMwiiduNmlDg0CbpkRvPD7xQLIizKvnoMroaeIq1Di1YsJ17cpE5aSlpMtnMWOzAZNiowSIhygwdc-Z8USCwDPNO57q2t-8WfuAfjqOAqXunJ9OgKwd1ts7J4okIWg5BQ0VLcR6sEwV5G1r3Bl0tLSAwUffFq9xU-FwqM4g1EpQvSj/s1600/Screen%20Shot%202022-05-13%20at%207.26.51%20PM.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="170" data-original-width="1600" height="34" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWKwQKkodHDUTMwiiduNmlDg0CbpkRvPD7xQLIizKvnoMroaeIq1Di1YsJ17cpE5aSlpMtnMWOzAZNiowSIhygwdc-Z8USCwDPNO57q2t-8WfuAfjqOAqXunJ9OgKwd1ts7J4okIWg5BQ0VLcR6sEwV5G1r3Bl0tLSAwUffFq9xU-FwqM4g1EpQvSj/s320/Screen%20Shot%202022-05-13%20at%207.26.51%20PM.png" width="320" /></a></div></div><div><span style="background-color: yellow; color: black; font-family: inherit;"><div class="separator" style="clear: both; text-align: center;"><br /></div></span></div><span style="font-family: inherit;">Execute the below command to get kubeconfig info, copy the entire content of the file:</span></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: Times;"><span style="background-color: yellow; font-family: inherit;">cat /var/lib/jenkins/.kube/config</span></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: Times;"><span style="background-color: yellow; font-family: inherit;"><br /></span></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: Times;"><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/a/AVvXsEh07GG01S0ezTnehqzoCjlHugN94T9-xwwv2ErJPG0I268sDgSANIMYcfFxV2n84TcSNos7FVprINGC_NlXiCBS5_Pgfybv81ccRlwPaUDO9AJVeU85ibtaD6VMlQ3OhptxEgqpxTmT9Hv3lcPxCAxkw3Uxc3kjLJnaj5QwnQLLg16aDLaDILUE5zZ4=s2376" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="1218" data-original-width="2376" height="164" src="https://blogger.googleusercontent.com/img/a/AVvXsEh07GG01S0ezTnehqzoCjlHugN94T9-xwwv2ErJPG0I268sDgSANIMYcfFxV2n84TcSNos7FVprINGC_NlXiCBS5_Pgfybv81ccRlwPaUDO9AJVeU85ibtaD6VMlQ3OhptxEgqpxTmT9Hv3lcPxCAxkw3Uxc3kjLJnaj5QwnQLLg16aDLaDILUE5zZ4=s320" width="320" /></a></div></div></div><div><div class="separator" style="clear: both; text-align: center;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both;">Open your text editor or notepad, copy and paste the entire content and save in a file.</div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both;">We will upload this file.</div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/a/AVvXsEgNnKliu1KL-cn_Ze5GgmrzCX6TUfs_TUC5xKu0P3q-QhfaN97pV_DRmZ-4Sh-zrbHMEl--CwHHC1MzJfyk9fh0ezzXOcExilGR6rVPsNISfEfXNadRplfeY9z3sAJ8ErXiBr5mx7I1OXO2CAH0b70tP1873KzRjLI5jzq2NW1T8WJPltq06bLGi_tACQ=s896" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="896" data-original-width="558" height="320" src="https://blogger.googleusercontent.com/img/a/AVvXsEgNnKliu1KL-cn_Ze5GgmrzCX6TUfs_TUC5xKu0P3q-QhfaN97pV_DRmZ-4Sh-zrbHMEl--CwHHC1MzJfyk9fh0ezzXOcExilGR6rVPsNISfEfXNadRplfeY9z3sAJ8ErXiBr5mx7I1OXO2CAH0b70tP1873KzRjLI5jzq2NW1T8WJPltq06bLGi_tACQ=s320" width="199" /></a></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both;">Enter ID as K8S and choose File and upload the file and save.</div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/a/AVvXsEitDtvjqpqYnopwU3Oi4C46zEST16kIPVW8MtIeRStLWPe3Lfhx9pNTMnAXRWV3mdBF5ThlakzAGEGmmgbFzhbvIQJSxO_MTxbljAcAaOBWwa4nd1IdYvTtNEt4pTwiBqkNZzs0FLS1gq7on8TAS2vaDbVJSDuLYKXmkFtAE21BSiFMAL9LGo0LApmenw=s884" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="884" data-original-width="558" height="320" src="https://blogger.googleusercontent.com/img/a/AVvXsEitDtvjqpqYnopwU3Oi4C46zEST16kIPVW8MtIeRStLWPe3Lfhx9pNTMnAXRWV3mdBF5ThlakzAGEGmmgbFzhbvIQJSxO_MTxbljAcAaOBWwa4nd1IdYvTtNEt4pTwiBqkNZzs0FLS1gq7on8TAS2vaDbVJSDuLYKXmkFtAE21BSiFMAL9LGo0LApmenw=s320" width="202" /></a></div><div class="separator" style="clear: both; text-align: center;"><span style="text-align: left;"><br /></span></div><div class="separator" style="clear: both; text-align: center;"><span style="text-align: left;">Enter ID as K8S and choose enter directly and paste the above file content and save.</span></div></div></div></div><div><div><span style="background-color: yellow; color: black; font-family: &quot;times&quot;; font-size: medium;"><br /></span></div><div><b style="font-family: times; font-size: large;"><u style="background-color: #fcff01;">Step # 3 - Create a pipeline in Jenkins</u></b></div></div><div>Create a new pipeline job.<br /><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEim0vfpcczHZ0luxDT1udrGNFglDkLoNreTHfkl7AYJUQqU7GF1k8UEtNt5qjzY_zu1fI50ol3x9lWuDHmVBu0VxDwwcWpn3VG9bniB3EMg9ka_B7kSRIJWs_ybTZ65W-hPvI_FXhPIsqc/s682/myk8sjob.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="682" data-original-width="590" height="320" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEim0vfpcczHZ0luxDT1udrGNFglDkLoNreTHfkl7AYJUQqU7GF1k8UEtNt5qjzY_zu1fI50ol3x9lWuDHmVBu0VxDwwcWpn3VG9bniB3EMg9ka_B7kSRIJWs_ybTZ65W-hPvI_FXhPIsqc/s320/myk8sjob.png" /></a><br /><b style="-webkit-text-stroke-width: 0px; font-family: times;"><u><br /></u></b></div><div><span style="font-size: medium;"><b style="-webkit-text-stroke-width: 0px; font-family: times;"><u style="background-color: yellow;">Step # 4 - Copy the pipeline code from below</u></b></span><br /><span style="color: black; display: inline; float: none; font-family: &quot;times&quot;; font-size: medium;">Make sure you change red highlighted values below as per your settings:</span><br /><span style="color: black; display: inline; float: none; font-family: &quot;times&quot;; font-size: medium;">Your docker user id should be updated.</span><br /><span style="color: black; display: inline; float: none; font-family: &quot;times&quot;; font-size: medium;">your registry credentials ID from Jenkins from step # 1 should be copied</span><br /></div><div><br /></div><div><div><span style="background-color: #04ff00; font-family: inherit;">pipeline {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp;tools {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; maven 'Maven3'</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; agent any</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; environment {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; registry = "</span><span style="background-color: red; font-family: inherit;">account_id</span><span style="background-color: #04ff00; font-family: inherit;">.dkr.ecr.us-east-1.amazonaws.com/my-docker-repo"</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp;</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; stages {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; stage('Cloning Git') {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; steps {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '<a href="https://github.com/akannan1087/springboot-app">https://github.com/akannan1087/springboot-app</a>']]])&nbsp; &nbsp; &nbsp;</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; stage ('Build') {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; steps {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; sh 'mvn clean install'&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; // Building Docker images</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; stage('Building image') {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; steps{</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; script {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dockerImage = docker.build registry&nbsp;</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp;</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; // Uploading Docker images into AWS ECR</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; stage('Pushing to ECR') {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp;steps{&nbsp;&nbsp;</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;script {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin&nbsp;<span style="background-color: red;">account_id</span>.dkr.ecr.us-east-1.amazonaws.com'</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; sh 'docker push&nbsp;<span style="background-color: red;">account_id</span>.dkr.ecr.us-east-1.amazonaws.com/my-docker-repo:latest'</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;"><br /></span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp;stage('K8S Deploy') {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; steps{&nbsp; &nbsp;</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; script {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; withKubeConfig([credentialsId: '</span><span style="background-color: red; font-family: inherit;">K8S</span><span style="background-color: #04ff00; font-family: inherit;">', serverUrl: '']) {</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; sh ('kubectl apply -f&nbsp; eks-deploy-k8s.yaml')</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp;}</span></div><div><span style="background-color: #04ff00; font-family: inherit;">&nbsp; &nbsp; }</span></div><div><span style="background-color: #04ff00; font-family: inherit;">}</span></div></div><div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times; text-align: center;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><span style="font-size: medium;"><b><u style="background-color: yellow;">Step # 5 - Build the pipeline</u></b></span></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;">Once you create the pipeline and changes values per your configuration, click on Build now:<div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/a/AVvXsEi_H6PgEVPk7Cu8iikw6Ac8wtfABBU5AjyimjzRCSCkoF4ePKYSXCljhlL5OeBMC6WczqwXZogi-t_y5F_zMe7Mn0zKMFKLdQ-lNfaFTkvRYOtQeAKBTmp45S8h2omnPNdc-MUj_p2K1aNK2da4fLB-cPSe9o50qHYc50j4Y29AJV7c8r3NKzDRyHnL=s1628" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="490" data-original-width="1628" height="96" src="https://blogger.googleusercontent.com/img/a/AVvXsEi_H6PgEVPk7Cu8iikw6Ac8wtfABBU5AjyimjzRCSCkoF4ePKYSXCljhlL5OeBMC6WczqwXZogi-t_y5F_zMe7Mn0zKMFKLdQ-lNfaFTkvRYOtQeAKBTmp45S8h2omnPNdc-MUj_p2K1aNK2da4fLB-cPSe9o50qHYc50j4Y29AJV7c8r3NKzDRyHnL=s320" width="320" /></a></div></div><div class="separator" style="clear: both; text-align: center;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><span style="font-size: medium;"><b><u style="background-color: yellow;">Step # 6 - Verify deployments to K8S</u></b></span></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><b><u><br /></u></b></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><span style="background-color: #fce8b2;">kubectl get pods</span></div><div style="text-align: center;"><div class="separator" style="clear: both;"><br /></div></div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhU5sxmtOITq7Ui2brQS42jhHiQJAVrUu7Sk2EMB6ZsMA71CkfEAaoYyFIFoz8Lqk3Bsqo3qOCfgEqEnnzDJaTS0xn34ZS6tKgEoF4yFqvobJy4twLLAxfjPzxZ1Kqkz9EtS6VHVLWeCkp7/s583/podd2.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="52" data-original-width="583" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhU5sxmtOITq7Ui2brQS42jhHiQJAVrUu7Sk2EMB6ZsMA71CkfEAaoYyFIFoz8Lqk3Bsqo3qOCfgEqEnnzDJaTS0xn34ZS6tKgEoF4yFqvobJy4twLLAxfjPzxZ1Kqkz9EtS6VHVLWeCkp7/s320/podd2.png" width="320" /></a></div><br /><br /><div><span style="background-color: #fce8b2;">kubectl get deployments</span></div><div><div class="separator" style="clear: both; text-align: center;"><br /><div class="separator" style="clear: both;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMYjzhhFeIpp9XHddbiCQisGhoxzk-0ejb7Kwqca5ISiQTgSs-ZjZ6ZvWaQ6LqAqyAngROvhifVs6s2UHrwT9gL-gE7BU_L5x8QBRFhvMvi2Hh2c5MoRzLgLAwtfZA9Anbvmp8uAJ_rI14/s535/d1.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="53" data-original-width="535" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMYjzhhFeIpp9XHddbiCQisGhoxzk-0ejb7Kwqca5ISiQTgSs-ZjZ6ZvWaQ6LqAqyAngROvhifVs6s2UHrwT9gL-gE7BU_L5x8QBRFhvMvi2Hh2c5MoRzLgLAwtfZA9Anbvmp8uAJ_rI14/s320/d1.png" width="320" /></a></div></div></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><span style="background-color: #fce8b2;">kubectl get services</span><b><u><br /></u></b><div class="separator" style="clear: both; text-align: center;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIR2MrPYyZHPwyhkK4Cf3G8SzDmCtQMXnaKC_-YODrWjPeIYD4zGbym6gWLzpfd4Fq2Phun-Z0DKlPnp4JdX2nJJnZca3rMxfJYSkYcN8yQeDDYVM46yc_STPiI4vp6bFXoPqwi8Qpn26p/s974/angular.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="72" data-original-width="974" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIR2MrPYyZHPwyhkK4Cf3G8SzDmCtQMXnaKC_-YODrWjPeIYD4zGbym6gWLzpfd4Fq2Phun-Z0DKlPnp4JdX2nJJnZca3rMxfJYSkYcN8yQeDDYVM46yc_STPiI4vp6bFXoPqwi8Qpn26p/s320/angular.png" width="320" /></a></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><br /></div>If you see any errors after deploying the pods, you can check the pod logs.</div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><div style="font-family: Times;"><span style="background-color: #fcff01;">kubectl logs </span><span style="background-color: red;">&lt;pod_name&gt;</span></div><div style="font-family: Times;"></div><div class="separator" style="clear: both; text-align: center;"><br /></div></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><span style="font-size: medium;"><b><u style="background-color: yellow;">Steps # 7 - Access SpringBoot App in K8S cluster</u></b></span></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;">Once build is successful, go to browser and enter master or worker node public ip address along with port number mentioned above</div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><span style="background-color: #fce8b2;">http://loadbalancer_ip_address</span></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;">You should see page like below:</div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><br /></div><div class="separator" style="clear: both; text-align: center;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjgXKMK8YIDYzecqj9JkKMcnsTpTllp51c5-O5xnXxy1VY2Qrfar7FJUNV59Vk6r50HikVcIN8Ygc6AhMWwQlrUCfnM7FjWXBotwXoDtVh-IzQdDct62L23tKVcHsrJuu1w26xNLietBrQ2/s822/springboot-app.png" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="315" data-original-width="822" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjgXKMK8YIDYzecqj9JkKMcnsTpTllp51c5-O5xnXxy1VY2Qrfar7FJUNV59Vk6r50HikVcIN8Ygc6AhMWwQlrUCfnM7FjWXBotwXoDtVh-IzQdDct62L23tKVcHsrJuu1w26xNLietBrQ2/s320/springboot-app.png" width="320" /></a></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><br /></div></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><u><b>Note:</b></u></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><br /></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;">Make sure you fork my repo&nbsp;<a href="https://github.com/akannan1087/springboot-app">https://github.com/akannan1087/springboot-app</a></div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;">and make changes in eks-deploy-k8s.yaml to pull Docker image from your AWS ECR repo.</div><div class="separator" style="-webkit-text-stroke-width: 0px; clear: both; font-family: times;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="https://blogger.googleusercontent.com/img/a/AVvXsEiJeBcgLoKDVbh3koKvGW_ZzJT950fZ1p5ZROELylsvrwKqrO4W1AAUW1eDtdTjMnYjXJiAK1cfOqGYTywag-bE7RizNXlcFZe9RAGWlNrNirVwzfDpnoZ5CbXZZIoM7Pa_R2PM_FCiXWyyPPf8ZcYrclbCAK5fUPcUhR95NmFdTc0MNuCmwtRkzqPT=s1362" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="1362" data-original-width="1256" height="320" src="https://blogger.googleusercontent.com/img/a/AVvXsEiJeBcgLoKDVbh3koKvGW_ZzJT950fZ1p5ZROELylsvrwKqrO4W1AAUW1eDtdTjMnYjXJiAK1cfOqGYTywag-bE7RizNXlcFZe9RAGWlNrNirVwzfDpnoZ5CbXZZIoM7Pa_R2PM_FCiXWyyPPf8ZcYrclbCAK5fUPcUhR95NmFdTc0MNuCmwtRkzqPT=s320" width="295" /></a></div></div>
+<div style='clear: both;'></div>
+</div>
+<div class='post-footer'>
+<div class='post-footer-line post-footer-line-1'>
+<span class='post-author vcard'>
+</span>
+<span class='post-timestamp'>
+at
+<meta content='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html' itemprop='url'/>
+<a class='timestamp-link' href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html' rel='bookmark' title='permanent link'><abbr class='published' itemprop='datePublished' title='2022-01-11T16:15:00-08:00'>January 11, 2022</abbr></a>
+</span>
+<span class='post-comment-link'>
+</span>
+<span class='post-icons'>
+<span class='item-control blog-admin pid-1760343262'>
+<a href='https://www.blogger.com/post-edit.g?blogID=1470536021193321646&postID=7325465026216084230&from=pencil' title='Edit Post'>
+<img alt='' class='icon-action' height='18' src='https://resources.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+</a>
+</span>
+</span>
+<div class='post-share-buttons goog-inline-block'>
+<a class='goog-inline-block share-button sb-email' href='https://www.blogger.com/share-post.g?blogID=1470536021193321646&postID=7325465026216084230&target=email' target='_blank' title='Email This'><span class='share-button-link-text'>Email This</span></a><a class='goog-inline-block share-button sb-blog' href='https://www.blogger.com/share-post.g?blogID=1470536021193321646&postID=7325465026216084230&target=blog' onclick='window.open(this.href, "_blank", "height=270,width=475"); return false;' target='_blank' title='BlogThis!'><span class='share-button-link-text'>BlogThis!</span></a><a class='goog-inline-block share-button sb-twitter' href='https://www.blogger.com/share-post.g?blogID=1470536021193321646&postID=7325465026216084230&target=twitter' target='_blank' title='Share to Twitter'><span class='share-button-link-text'>Share to Twitter</span></a><a class='goog-inline-block share-button sb-facebook' href='https://www.blogger.com/share-post.g?blogID=1470536021193321646&postID=7325465026216084230&target=facebook' onclick='window.open(this.href, "_blank", "height=430,width=640"); return false;' target='_blank' title='Share to Facebook'><span class='share-button-link-text'>Share to Facebook</span></a><a class='goog-inline-block share-button sb-pinterest' href='https://www.blogger.com/share-post.g?blogID=1470536021193321646&postID=7325465026216084230&target=pinterest' target='_blank' title='Share to Pinterest'><span class='share-button-link-text'>Share to Pinterest</span></a>
+</div>
+</div>
+<div class='post-footer-line post-footer-line-2'>
+<span class='post-labels'>
+Labels:
+<a href='https://www.coachdevops.com/search/label/Docker' rel='tag'>Docker</a>,
+<a href='https://www.coachdevops.com/search/label/EKS' rel='tag'>EKS</a>,
+<a href='https://www.coachdevops.com/search/label/Jenkins' rel='tag'>Jenkins</a>,
+<a href='https://www.coachdevops.com/search/label/Kubernetes' rel='tag'>Kubernetes</a>,
+<a href='https://www.coachdevops.com/search/label/Pipelines' rel='tag'>Pipelines</a>
+</span>
+</div>
+<div class='post-footer-line post-footer-line-3'>
+<span class='post-location'>
+</span>
+</div>
+</div>
+</div>
+<div class='comments' id='comments'>
+<a name='comments'></a>
+<h4>3 comments:</h4>
+<div class='comments-content'>
+<script async='async' src='' type='text/javascript'></script>
+<script type='text/javascript'>
+    (function() {
+      var items = null;
+      var msgs = null;
+      var config = {};
+
+// <![CDATA[
+      var cursor = null;
+      if (items && items.length > 0) {
+        cursor = parseInt(items[items.length - 1].timestamp) + 1;
+      }
+
+      var bodyFromEntry = function(entry) {
+        var text = (entry &&
+                    ((entry.content && entry.content.$t) ||
+                     (entry.summary && entry.summary.$t))) ||
+            '';
+        if (entry && entry.gd$extendedProperty) {
+          for (var k in entry.gd$extendedProperty) {
+            if (entry.gd$extendedProperty[k].name == 'blogger.contentRemoved') {
+              return '<span class="deleted-comment">' + text + '</span>';
+            }
+          }
+        }
+        return text;
+      }
+
+      var parse = function(data) {
+        cursor = null;
+        var comments = [];
+        if (data && data.feed && data.feed.entry) {
+          for (var i = 0, entry; entry = data.feed.entry[i]; i++) {
+            var comment = {};
+            // comment ID, parsed out of the original id format
+            var id = /blog-(\d+).post-(\d+)/.exec(entry.id.$t);
+            comment.id = id ? id[2] : null;
+            comment.body = bodyFromEntry(entry);
+            comment.timestamp = Date.parse(entry.published.$t) + '';
+            if (entry.author && entry.author.constructor === Array) {
+              var auth = entry.author[0];
+              if (auth) {
+                comment.author = {
+                  name: (auth.name ? auth.name.$t : undefined),
+                  profileUrl: (auth.uri ? auth.uri.$t : undefined),
+                  avatarUrl: (auth.gd$image ? auth.gd$image.src : undefined)
+                };
+              }
+            }
+            if (entry.link) {
+              if (entry.link[2]) {
+                comment.link = comment.permalink = entry.link[2].href;
+              }
+              if (entry.link[3]) {
+                var pid = /.*comments\/default\/(\d+)\?.*/.exec(entry.link[3].href);
+                if (pid && pid[1]) {
+                  comment.parentId = pid[1];
+                }
+              }
+            }
+            comment.deleteclass = 'item-control blog-admin';
+            if (entry.gd$extendedProperty) {
+              for (var k in entry.gd$extendedProperty) {
+                if (entry.gd$extendedProperty[k].name == 'blogger.itemClass') {
+                  comment.deleteclass += ' ' + entry.gd$extendedProperty[k].value;
+                } else if (entry.gd$extendedProperty[k].name == 'blogger.displayTime') {
+                  comment.displayTime = entry.gd$extendedProperty[k].value;
+                }
+              }
+            }
+            comments.push(comment);
+          }
+        }
+        return comments;
+      };
+
+      var paginator = function(callback) {
+        if (hasMore()) {
+          var url = config.feed + '?alt=json&v=2&orderby=published&reverse=false&max-results=50';
+          if (cursor) {
+            url += '&published-min=' + new Date(cursor).toISOString();
+          }
+          window.bloggercomments = function(data) {
+            var parsed = parse(data);
+            cursor = parsed.length < 50 ? null
+                : parseInt(parsed[parsed.length - 1].timestamp) + 1
+            callback(parsed);
+            window.bloggercomments = null;
+          }
+          url += '&callback=bloggercomments';
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = url;
+          document.getElementsByTagName('head')[0].appendChild(script);
+        }
+      };
+      var hasMore = function() {
+        return !!cursor;
+      };
+      var getMeta = function(key, comment) {
+        if ('iswriter' == key) {
+          var matches = !!comment.author
+              && comment.author.name == config.authorName
+              && comment.author.profileUrl == config.authorUrl;
+          return matches ? 'true' : '';
+        } else if ('deletelink' == key) {
+          return config.baseUri + '/delete-comment.g?blogID='
+               + config.blogId + '&postID=' + comment.id;
+        } else if ('deleteclass' == key) {
+          return comment.deleteclass;
+        }
+        return '';
+      };
+
+      var replybox = null;
+      var replyUrlParts = null;
+      var replyParent = undefined;
+
+      var onReply = function(commentId, domId) {
+        if (replybox == null) {
+          // lazily cache replybox, and adjust to suit this style:
+          replybox = document.getElementById('comment-editor');
+          if (replybox != null) {
+            replybox.height = '250px';
+            replybox.style.display = 'block';
+            replyUrlParts = replybox.src.split('#');
+          }
+        }
+        if (replybox && (commentId !== replyParent)) {
+          replybox.src = '';
+          document.getElementById(domId).insertBefore(replybox, null);
+          replybox.src = replyUrlParts[0]
+              + (commentId ? '&parentID=' + commentId : '')
+              + '#' + replyUrlParts[1];
+          replyParent = commentId;
+        }
+      };
+
+      var hash = (window.location.hash || '#').substring(1);
+      var startThread, targetComment;
+      if (/^comment-form_/.test(hash)) {
+        startThread = hash.substring('comment-form_'.length);
+      } else if (/^c[0-9]+$/.test(hash)) {
+        targetComment = hash.substring(1);
+      }
+
+      // Configure commenting API:
+      var configJso = {
+        'maxDepth': config.maxThreadDepth
+      };
+      var provider = {
+        'id': config.postId,
+        'data': items,
+        'loadNext': paginator,
+        'hasMore': hasMore,
+        'getMeta': getMeta,
+        'onReply': onReply,
+        'rendered': true,
+        'initComment': targetComment,
+        'initReplyThread': startThread,
+        'config': configJso,
+        'messages': msgs
+      };
+
+      var render = function() {
+        if (window.goog && window.goog.comments) {
+          var holder = document.getElementById('comment-holder');
+          window.goog.comments.render(holder, provider);
+        }
+      };
+
+      // render now, or queue to render when library loads:
+      if (window.goog && window.goog.comments) {
+        render();
+      } else {
+        window.goog = window.goog || {};
+        window.goog.comments = window.goog.comments || {};
+        window.goog.comments.loadQueue = window.goog.comments.loadQueue || [];
+        window.goog.comments.loadQueue.push(render);
+      }
+    })();
+// ]]>
+  </script>
+<div id='comment-holder'>
+<div class="comment-thread toplevel-thread"><ol id="top-ra"><li class="comment" id="c4875886954207061696"><div class="avatar-image-container"><img src="//www.blogger.com/img/blogger_logo_round_35.png" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/00266134484213916000" rel="nofollow">Ganey4mKottampatti</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html?showComment=1678716399594#c4875886954207061696">March 13, 2023 at 7:06&#8239;AM</a></span></div><p class="comment-content">jenkins@jenkins:~$ cat /var/lib/jenkins/.kube/config<br>cat: /var/lib/jenkins/.kube/config: No such file or directory<br>jenkins@jenkins:~$ <br></p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="4875886954207061696">Reply</a><span class="item-control blog-admin blog-admin pid-1633969443"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=1470536021193321646&amp;postID=4875886954207061696">Delete</a></span></span></div><div class="comment-replies"><div id="c4875886954207061696-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Replies</a></span></span><ol id="c4875886954207061696-ra" class="thread-chrome thread-expanded"><div></div><div id="c4875886954207061696-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4875886954207061696">Reply</a></div></ol></div></div><div class="comment-replybox-single" id="c4875886954207061696-ce"></div></li><li class="comment" id="c7024662684189873728"><div class="avatar-image-container"><img src="//www.blogger.com/img/blogger_logo_round_35.png" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/00266134484213916000" rel="nofollow">Ganey4mKottampatti</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html?showComment=1678716435963#c7024662684189873728">March 13, 2023 at 7:07&#8239;AM</a></span></div><p class="comment-content">This comment has been removed by a blog administrator.</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="7024662684189873728">Reply</a><span class="item-control blog-admin blog-admin "><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=1470536021193321646&amp;postID=7024662684189873728">Delete</a></span></span></div><div class="comment-replies"><div id="c7024662684189873728-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Replies</a></span></span><ol id="c7024662684189873728-ra" class="thread-chrome thread-expanded"><div></div><div id="c7024662684189873728-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="7024662684189873728">Reply</a></div></ol></div></div><div class="comment-replybox-single" id="c7024662684189873728-ce"></div></li><li class="comment" id="c3851253435635079730"><div class="avatar-image-container"><img src="//www.blogger.com/img/blogger_logo_round_35.png" alt=""/></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/05475985687409185142" rel="nofollow">amar</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html?showComment=1678797205586#c3851253435635079730">March 14, 2023 at 5:33&#8239;AM</a></span></div><p class="comment-content">in jenkins pipeline during docker image build stage, how it is getting build? is it referring docker file from github and also in pipeline its just mentioned &quot;docker.build registry&quot; - what exactly it will do, can we use &quot;docker build -t registry .&quot; command instead</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="3851253435635079730">Reply</a><span class="item-control blog-admin blog-admin pid-1537721263"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=1470536021193321646&amp;postID=3851253435635079730">Delete</a></span></span></div><div class="comment-replies"><div id="c3851253435635079730-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self">Replies</a></span></span><ol id="c3851253435635079730-ra" class="thread-chrome thread-expanded"><div></div><div id="c3851253435635079730-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="3851253435635079730">Reply</a></div></ol></div></div><div class="comment-replybox-single" id="c3851253435635079730-ce"></div></li></ol><div id="top-continue" class="continue"><a class="comment-reply" target="_self">Add comment</a></div><div class="comment-replybox-thread" id="top-ce"></div><div class="loadmore hidden" data-post-id="7325465026216084230"><a target="_self">Load more...</a></div></div>
+</div>
+</div>
+<p class='comment-footer'>
+<div class='comment-form'>
+<a name='comment-form'></a>
+<p>
+</p>
+<a href='https://www.blogger.com/comment/frame/1470536021193321646?po=7325465026216084230&hl=en' id='comment-editor-src'></a>
+<iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' frameborder='0' height='410px' id='comment-editor' name='comment-editor' src='' width='100%'></iframe>
+<script src='https://www.blogger.com/static/v1/jsbin/4269703388-comment_from_post_iframe.js' type='text/javascript'></script>
+<script type='text/javascript'>
+      BLOG_CMT_createIframe('https://www.blogger.com/rpc_relay.html');
+    </script>
+</div>
+</p>
+<div id='backlinks-container'>
+<div id='Blog1_backlinks-container'>
+</div>
+</div>
+</div>
+</div>
+
+        </div></div>
+      
+</div>
+<div class='blog-pager' id='blog-pager'>
+<span id='blog-pager-newer-link'>
+<a class='blog-pager-newer-link' href='https://www.coachdevops.com/2022/01/install-sonatype-nexus-3-using-docker.html' id='Blog1_blog-pager-newer-link' title='Newer Post'>Newer Post</a>
+</span>
+<span id='blog-pager-older-link'>
+<a class='blog-pager-older-link' href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app.html' id='Blog1_blog-pager-older-link' title='Older Post'>Older Post</a>
+</span>
+<a class='home-link' href='https://www.coachdevops.com/'>Home</a>
+</div>
+<div class='clear'></div>
+<div class='post-feeds'>
+<div class='feed-links'>
+Subscribe to:
+<a class='feed-link' href='https://www.coachdevops.com/feeds/7325465026216084230/comments/default' target='_blank' type='application/atom+xml'>Post Comments (Atom)</a>
+</div>
+</div>
+</div><div class='widget FeaturedPost' data-version='1' id='FeaturedPost1'>
+<div class='post-summary'>
+<h3><a href='https://www.coachdevops.com/2024/03/how-to-create-quality-gate-in-sonarqube.html'>How to Create Quality Gate in SonarQube and integrate with GitHub Actions | SonarQube Integration with GitHub Actions | Automate Code Scan using SonarQube In GitHub Actions and Force build to Fail or Pass</a></h3>
+<p>
+Pre-requisites: Make sure SonarQube is up and running Make sure Java Project is setup in&#160;GitHub SonarQube is already integrated with GitHub ...
+</p>
+<img class='image' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgw6fFiVFxDxRYAq0qjTtMseYHCsGQWfjzbjnfrMG78E1MHTD-OP_AN_kKA315xzGMjeGEPXC1yYgmmQcf_rb2qO0Mr-MjYu1XJhKjBvoVIKtIiQTIkWg_JkUxhhUehjjMA3qLMtaDu79eHsZbr-2Dx2U59fWdLFXQAqCPkqtp5agC_w2__P1xXzvclFQM/w400-h234/Screenshot%202024-03-12%20at%204.20.18%20PM.png'/>
+</div>
+<style type='text/css'>
+    .image {
+      width: 100%;
+    }
+  </style>
+<div class='clear'></div>
+</div><div class='widget PopularPosts' data-version='1' id='PopularPosts1'>
+<div class='widget-content popular-posts'>
+<ul>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2022/02/create-amazon-eks-cluster-by-eksctl-how.html' target='_blank'>
+<img alt='' border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgbJv7ou1QM_fC9bOaUELtr37sPKJfaVv5uPTAXhOXha6YencIC2RRRYkyzrlAjMIc8poHuTSXP736Li_MXh1owCgq7XYC6p4NiN4lXTi4AEF2uneRlCdK95A8jMJfng0vrYr3hnuP-Z2U/w72-h72-p-k-no-nu/EKS+Cluster+Architecture.png'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2022/02/create-amazon-eks-cluster-by-eksctl-how.html'>Create Amazon EKS cluster by eksctl | How to create EKS cluster in AWS cloud using eksctl | Create EKS Cluster in command line using IAM Role</a></div>
+<div class='item-snippet'>What is Amazon EKS Amazon EKS is a fully managed container orchestration service. EKS allows you to quickly deploy a production ready Kubern...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2023/01/how-to-setup-self-hosted-linux-agent-in.html' target='_blank'>
+<img alt='' border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg_sKTp6r-BtF7EkVI8ZRLPmvV51ZcKbRvqgQA64iemTEpNTiVyibfvZpfrXOidVKSJTARrIe1YEIUg1j8Jz-lej4_OOR67l75MO7eeoQurauJMRGdHtFthHI_p3FFztz7Ir9ZGmKbIMZ3UzYg_50agKCLnxF6kn2Y1_MLQ7HSWpmtFSQ0oXTqbxfSD/w72-h72-p-k-no-nu/Screen%20Shot%202023-01-25%20at%2010.10.10%20PM.png'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2023/01/how-to-setup-self-hosted-linux-agent-in.html'>How to Setup Self Hosted Linux Agent in Azure DevOps | How to configure Self Hosted Agent for Azure Pipelines | Create Build Agent in Azure Cloud</a></div>
+<div class='item-snippet'>Let us learn how to create and configure a Self-Hosted Agent in Azure DevOps (ADO). What is an Agent? An agent is computing infrastructure w...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html' target='_blank'>
+<img alt='' border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/w72-h72-p-k-no-nu/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html'>Deploy Springboot Microservices App into Amazon EKS Cluster using Jenkins Pipeline and Kubectl CLI Plug-in | Containerize Springboot App and Deploy into EKS Cluster using Jenkins Pipeline</a></div>
+<div class='item-snippet'>We will learn how to automate springboot microservices builds using Jenkins pipeline and Deploy into AWS EKS Cluster with help of Kubernetes...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+</ul>
+<div class='clear'></div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='column-left-outer'>
+<div class='column-left-inner'>
+<aside>
+</aside>
+</div>
+</div>
+<div class='column-right-outer'>
+<div class='column-right-inner'>
+<aside>
+<div class='sidebar section' id='sidebar-right-1'><div class='widget AdSense' data-version='1' id='AdSense3'>
+<div class='widget-content'>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1222349908741615&host=ca-host-pub-1556223355139109" crossorigin="anonymous"></script>
+<!-- devopscoaching_sidebar-right-1_AdSense3_160x600_as -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-1222349908741615"
+     data-ad-host="ca-host-pub-1556223355139109"
+     data-ad-slot="2720600288"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div class='clear'></div>
+</div>
+</div><div class='widget PageList' data-version='1' id='PageList1'>
+<h2>Contact Coach</h2>
+<div class='widget-content'>
+<ul>
+<li>
+<a href='https://chat.whatsapp.com/IiuhIbRmf2x5UK61U5nDHX'>Join WhatsApp Group for Course Enquiry</a>
+</li>
+<li>
+<a href='https://www.coachdevops.com/2024/01/devops-bootcamp-jan-2024-schedule.html'>DevOps Bootcamp Schedule</a>
+</li>
+<li>
+<a href='https://chat.whatsapp.com/I8XepvRwUDIJZxejkA8b4W'>Troubleshooting Assistance from DevOps Coach </a>
+</li>
+<li>
+<a href='https://www.coachdevops.com/2019/04/devops-coaching-model-information.html'>About the Coach & Coaching Model</a>
+</li>
+<li>
+<a href='https://www.coachdevops.com/2023/12/devops-interview-preparation-courses.html'>DevOps Interview Preparation Course</a>
+</li>
+</ul>
+<div class='clear'></div>
+</div>
+</div><div class='widget ContactForm' data-version='1' id='ContactForm1'>
+<h2 class='title'>Contact here for registering to Coaching Program</h2>
+<div class='contact-form-widget'>
+<div class='form'>
+<form name='contact-form'>
+<p></p>
+Name
+<br/>
+<input class='contact-form-name' id='ContactForm1_contact-form-name' name='name' size='30' type='text' value=''/>
+<p></p>
+Email
+<span style='font-weight: bolder;'>*</span>
+<br/>
+<input class='contact-form-email' id='ContactForm1_contact-form-email' name='email' size='30' type='text' value=''/>
+<p></p>
+Message
+<span style='font-weight: bolder;'>*</span>
+<br/>
+<textarea class='contact-form-email-message' cols='25' id='ContactForm1_contact-form-email-message' name='email-message' rows='5'></textarea>
+<p></p>
+<input class='contact-form-button contact-form-button-submit' id='ContactForm1_contact-form-submit' type='button' value='Send'/>
+<p></p>
+<div style='text-align: center; max-width: 222px; width: 100%'>
+<p class='contact-form-error-message' id='ContactForm1_contact-form-error-message'></p>
+<p class='contact-form-success-message' id='ContactForm1_contact-form-success-message'></p>
+</div>
+</form>
+</div>
+</div>
+<div class='clear'></div>
+</div><div class='widget HTML' data-version='1' id='HTML1'>
+<h2 class='title'>Subscribe to My YouTube Channel</h2>
+<div class='widget-content'>
+<script src="https://apis.google.com/js/platform.js"></script>
+
+<div class="g-ytsubscribe" data-channelid="UC50EWznOxjXe0w4fEvm7X5Q" data-layout="default" data-count="default"></div>
+</div>
+<div class='clear'></div>
+</div><div class='widget BlogSearch' data-version='1' id='BlogSearch1'>
+<h2 class='title'>Search This Blog</h2>
+<div class='widget-content'>
+<div id='BlogSearch1_form'>
+<form action='https://www.coachdevops.com/search' class='gsc-search-box' target='_top'>
+<table cellpadding='0' cellspacing='0' class='gsc-search-box'>
+<tbody>
+<tr>
+<td class='gsc-input'>
+<input autocomplete='off' class='gsc-input' name='q' size='10' title='search' type='text' value=''/>
+</td>
+<td class='gsc-search-button'>
+<input class='gsc-search-button' title='search' type='submit' value='Search'/>
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+</div>
+</div>
+<div class='clear'></div>
+</div><div class='widget Label' data-version='1' id='Label1'>
+<h2>Labels</h2>
+<div class='widget-content list-label-widget-content'>
+<ul>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/ACR'>ACR</a>
+<span dir='ltr'>(4)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/AKS'>AKS</a>
+<span dir='ltr'>(16)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Ansible'>Ansible</a>
+<span dir='ltr'>(28)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Artifactory'>Artifactory</a>
+<span dir='ltr'>(11)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/AWS'>AWS</a>
+<span dir='ltr'>(19)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Azure'>Azure</a>
+<span dir='ltr'>(27)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Azure%20Cloud'>Azure Cloud</a>
+<span dir='ltr'>(10)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Azure%20DevOps'>Azure DevOps</a>
+<span dir='ltr'>(27)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Azure%20pipelines'>Azure pipelines</a>
+<span dir='ltr'>(12)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/BitBucket'>BitBucket</a>
+<span dir='ltr'>(9)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/CICD'>CICD</a>
+<span dir='ltr'>(22)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Code%20Quality'>Code Quality</a>
+<span dir='ltr'>(12)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Containers'>Containers</a>
+<span dir='ltr'>(3)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/DevOps'>DevOps</a>
+<span dir='ltr'>(13)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/DevOps%20BootCamp'>DevOps BootCamp</a>
+<span dir='ltr'>(8)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/DevOps%20Coaching'>DevOps Coaching</a>
+<span dir='ltr'>(24)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/DevOps%20Interview%20Questions'>DevOps Interview Questions</a>
+<span dir='ltr'>(5)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/DevOps%20Interview%20Tips'>DevOps Interview Tips</a>
+<span dir='ltr'>(10)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/DevOps%20Tools'>DevOps Tools</a>
+<span dir='ltr'>(10)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/DevOps%20Training'>DevOps Training</a>
+<span dir='ltr'>(21)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/DevOps%20Troubleshooting'>DevOps Troubleshooting</a>
+<span dir='ltr'>(12)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Docker'>Docker</a>
+<span dir='ltr'>(37)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Docker%20Compose'>Docker Compose</a>
+<span dir='ltr'>(4)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/ECR'>ECR</a>
+<span dir='ltr'>(3)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/EKS'>EKS</a>
+<span dir='ltr'>(9)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Git'>Git</a>
+<span dir='ltr'>(16)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/GitHub'>GitHub</a>
+<span dir='ltr'>(14)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/GitHub%20Actions'>GitHub Actions</a>
+<span dir='ltr'>(6)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Grafana'>Grafana</a>
+<span dir='ltr'>(3)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Helm3'>Helm3</a>
+<span dir='ltr'>(6)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/IAC'>IAC</a>
+<span dir='ltr'>(38)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/IAM'>IAM</a>
+<span dir='ltr'>(1)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Infrastructure'>Infrastructure</a>
+<span dir='ltr'>(13)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Jenkins'>Jenkins</a>
+<span dir='ltr'>(77)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/JFrog'>JFrog</a>
+<span dir='ltr'>(2)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/K8S'>K8S</a>
+<span dir='ltr'>(9)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/kubectl'>kubectl</a>
+<span dir='ltr'>(5)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Kubernetes'>Kubernetes</a>
+<span dir='ltr'>(35)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Maven'>Maven</a>
+<span dir='ltr'>(10)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Microservices'>Microservices</a>
+<span dir='ltr'>(7)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Nexus'>Nexus</a>
+<span dir='ltr'>(12)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Nexus%203'>Nexus 3</a>
+<span dir='ltr'>(5)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Pipelines'>Pipelines</a>
+<span dir='ltr'>(15)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Playbooks'>Playbooks</a>
+<span dir='ltr'>(19)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Prometheus'>Prometheus</a>
+<span dir='ltr'>(3)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Puppet'>Puppet</a>
+<span dir='ltr'>(8)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Redhat'>Redhat</a>
+<span dir='ltr'>(3)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/S3'>S3</a>
+<span dir='ltr'>(5)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/SCM'>SCM</a>
+<span dir='ltr'>(5)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Slack'>Slack</a>
+<span dir='ltr'>(5)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Sonarqube'>Sonarqube</a>
+<span dir='ltr'>(22)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Springboot'>Springboot</a>
+<span dir='ltr'>(6)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Teamcity'>Teamcity</a>
+<span dir='ltr'>(4)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Terraform'>Terraform</a>
+<span dir='ltr'>(25)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Tomcat'>Tomcat</a>
+<span dir='ltr'>(5)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Ubuntu'>Ubuntu</a>
+<span dir='ltr'>(32)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Ubuntu%2022.0.4'>Ubuntu 22.0.4</a>
+<span dir='ltr'>(16)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/VSCode'>VSCode</a>
+<span dir='ltr'>(4)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/VSTS'>VSTS</a>
+<span dir='ltr'>(6)</span>
+</li>
+<li>
+<a dir='ltr' href='https://www.coachdevops.com/search/label/Webhooks'>Webhooks</a>
+<span dir='ltr'>(4)</span>
+</li>
+</ul>
+<div class='clear'></div>
+</div>
+</div><div class='widget PopularPosts' data-version='1' id='PopularPosts2'>
+<h2>Popular Posts</h2>
+<div class='widget-content popular-posts'>
+<ul>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2019/02/create-build-job-in-jenkins-how-to.html' target='_blank'>
+<img alt='' border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_4Hvj_EUhfwkI28Q3zg7uSEL0Q7shUjsFcnkB4USdbUltWgIy1LjVci0D3yuci3o98aGPY-j9eDQ_8X6kfOAERkETp3dxMthenXoatf3J1I-Ry1fuNsqVE6H4ApNOmtIBkxwPBxXPZgTy04_BEml2HjmNApZZhrrPKt0WYmcm37SIbUJempOWi7SW/w72-h72-p-k-no-nu/Screen%20Shot%202022-04-08%20at%2010.44.08%20AM.png'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2019/02/create-build-job-in-jenkins-how-to.html'>Create Freestyle job in Jenkins | How to create build job in Jenkins to automate Java build and deployment of WAR into Tomcat</a></div>
+<div class='item-snippet'> Jenkins is popular open source Continuous integration tool. It was written entirely in Java. Jenkins is a self-contained automation server ...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2020/04/install-jenkins-ubuntu-1804-setup.html' target='_blank'>
+<img alt='' border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh9ulgOo3qGTCSs70DkmgUcEN8r0qyhzY6TPA1qiAow2IPxZo-lxDLxuFPWqw54E7YbMpr055HnJKJzWP7j_yFnYD1o2i9XYRyE5oTEiZf2uaKQmDcFCXAZGxJWDDRasn_QIRe0EA9MQOs/w72-h72-p-k-no-nu/Java+install.png'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2020/04/install-jenkins-ubuntu-1804-setup.html'>Install Jenkins on Ubuntu 22.0.4 | Setup Jenkins on AWS EC2 Ubuntu instance | How to setup Jenkins in Ubuntu EC2 instance?</a></div>
+<div class='item-snippet'>Jenkins is an open source continuous integration/continuous delivery and deployment (CI/CD) automation software DevOps tool written in the J...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2022/02/create-amazon-eks-cluster-by-eksctl-how.html' target='_blank'>
+<img alt='' border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgbJv7ou1QM_fC9bOaUELtr37sPKJfaVv5uPTAXhOXha6YencIC2RRRYkyzrlAjMIc8poHuTSXP736Li_MXh1owCgq7XYC6p4NiN4lXTi4AEF2uneRlCdK95A8jMJfng0vrYr3hnuP-Z2U/w72-h72-p-k-no-nu/EKS+Cluster+Architecture.png'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2022/02/create-amazon-eks-cluster-by-eksctl-how.html'>Create Amazon EKS cluster by eksctl | How to create EKS cluster in AWS cloud using eksctl | Create EKS Cluster in command line using IAM Role</a></div>
+<div class='item-snippet'>What is Amazon EKS Amazon EKS is a fully managed container orchestration service. EKS allows you to quickly deploy a production ready Kubern...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2019/05/setup-repo-and-create-java-project-in.html' target='_blank'>
+<img alt='' border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgvhUQW62d9UZETjnljuuPkourPz7sD7bUFCOVyX0KixqzfVHunfnRReMhP8d3iRQbpCYoAuQicnJqvH7amyWVfJwLp9Q9VdLW1GlftY-7HSipZof1Exxe6SYjZsxKGiqjrgmrxMdAxMbw/w72-h72-p-k-no-nu/Screen+Shot+2021-10-31+at+8.49.01+PM.png'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2019/05/setup-repo-and-create-java-project-in.html'>How to setup SSH keys | How to setup Repo in GitHub and Setup Java Project in GitHub | How to add a Java Web App in GitHub using Maven</a></div>
+<div class='item-snippet'>                    GitHub is one of the popular git-based version control systems. GitHub is  very good example for Software-as-a-service, ...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html' target='_blank'>
+<img alt='' border='0' src='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/w72-h72-p-k-no-nu/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html'>Deploy Springboot Microservices App into Amazon EKS Cluster using Jenkins Pipeline and Kubectl CLI Plug-in | Containerize Springboot App and Deploy into EKS Cluster using Jenkins Pipeline</a></div>
+<div class='item-snippet'>We will learn how to automate springboot microservices builds using Jenkins pipeline and Deploy into AWS EKS Cluster with help of Kubernetes...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2020/04/how-to-integrate-sonarqube-with-jenkins.html' target='_blank'>
+<img alt='' border='0' src='https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_sY3cTumEG3wsA9VcyDu2p6lmTJYBKWm72ZGqRnhG1Dm3ohNgQq2gudbpYwoBFJqD7PAmxAxRN79Y4gfgGSLCwUBlAWZPk-CBzYpH37pmqDCs42bA=w72-h72-n-k-no-nu'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2020/04/how-to-integrate-sonarqube-with-jenkins.html'>How to Integrate SonarQube with Jenkins | Jenkins SonarQube Integration</a></div>
+<div class='item-snippet'> Here below are the steps for integrating&#160; SonarQube &#160;with Jenkins:   Pre-requisites:  Make sure&#160; SonarQube &#160;is up and running   Make sure S...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+<li>
+<div class='item-content'>
+<div class='item-thumbnail'>
+<a href='https://www.coachdevops.com/2019/01/pre-requisites-before-starting-devops.html' target='_blank'>
+<img alt='' border='0' src='https://lh3.googleusercontent.com/blogger_img_proxy/AEn0k_unsWNR8tv7BGMvwPIab0KNUz5kYEme1e2kOivBhY6ezNKCccylrDnxPluXshcGLzG_oP-2cyj32EgX-ILVHZ9i-r1yeddzxkvzrLDC5LIMxPk-Bg=w72-h72-n-k-no-nu'/>
+</a>
+</div>
+<div class='item-title'><a href='https://www.coachdevops.com/2019/01/pre-requisites-before-starting-devops.html'>Pre-requisites before starting the DevOps Coaching | </a></div>
+<div class='item-snippet'>Please watch the video first before you get started:    1. Create an account in https://aws.amazon.com . Set that as basic free tier account...</div>
+</div>
+<div style='clear: both;'></div>
+</li>
+</ul>
+<div class='clear'></div>
+</div>
+</div><div class='widget BlogArchive' data-version='1' id='BlogArchive1'>
+<h2>Blog Archive</h2>
+<div class='widget-content'>
+<div id='ArchiveList'>
+<div id='BlogArchive1_ArchiveList'>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2024/'>
+2024
+</a>
+<span class='post-count' dir='ltr'>(19)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2024/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2024/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2024/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/'>
+2023
+</a>
+<span class='post-count' dir='ltr'>(63)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(11)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2023/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/'>
+2022
+</a>
+<span class='post-count' dir='ltr'>(46)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(10)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>
+
+        &#9660;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2022/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+<ul class='posts'>
+<li><a href='https://www.coachdevops.com/2021/03/install-helm-3-linux-setup-helm-3-on.html'>Install Helm 3 Linux - Setup Helm 3 on Linux | Ins...</a></li>
+<li><a href='https://www.coachdevops.com/2022/01/install-sonatype-nexus-3-using-docker.html'>Install SonaType Nexus 3 using Docker Compose | In...</a></li>
+<li><a href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html'>Deploy Springboot Microservices App into Amazon EK...</a></li>
+<li><a href='https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app.html'>Deploy Springboot Microservices App into Amazon AK...</a></li>
+<li><a href='https://www.coachdevops.com/2021/05/top-10-devops-popular-tools-popular.html'>Top 10 DevOps Popular Tools | Popular DevOps Tools...</a></li>
+<li><a href='https://www.coachdevops.com/2021/02/top-devops-skills-for-2021-skills.html'>Top DevOps Skills for 2024 | Skills required to be...</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/'>
+2021
+</a>
+<span class='post-count' dir='ltr'>(53)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(7)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2021/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/'>
+2020
+</a>
+<span class='post-count' dir='ltr'>(84)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(15)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(11)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(6)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(8)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(19)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2020/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/'>
+2019
+</a>
+<span class='post-count' dir='ltr'>(51)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/11/'>
+November
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/10/'>
+October
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/09/'>
+September
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/08/'>
+August
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/06/'>
+June
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/05/'>
+May
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(17)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2019/01/'>
+January
+</a>
+<span class='post-count' dir='ltr'>(11)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2018/'>
+2018
+</a>
+<span class='post-count' dir='ltr'>(13)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2018/12/'>
+December
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2018/07/'>
+July
+</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2018/04/'>
+April
+</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2018/03/'>
+March
+</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+        &#9658;&#160;
+      
+</span>
+</a>
+<a class='post-count-link' href='https://www.coachdevops.com/2018/02/'>
+February
+</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class='clear'></div>
+</div>
+</div><div class='widget Profile' data-version='1' id='Profile1'>
+<h2>Contributors</h2>
+<div class='widget-content'>
+<ul>
+<li><a class='profile-name-link g-profile' href='https://www.blogger.com/profile/18175689082369573520' style='background-image: url(//www.blogger.com/img/logo-16.png);'>Amy</a></li>
+<li><a class='profile-name-link g-profile' href='https://www.blogger.com/profile/04772881776050570696' style='background-image: url(//www.blogger.com/img/logo-16.png);'>Amy</a></li>
+<li><a class='profile-name-link g-profile' href='https://www.blogger.com/profile/10342164676012321332' style='background-image: url(//www.blogger.com/img/logo-16.png);'>DevOps Coach</a></li>
+</ul>
+<div class='clear'></div>
+</div>
+</div><div class='widget Followers' data-version='1' id='Followers1'>
+<h2 class='title'>Followers</h2>
+<div class='widget-content'>
+<div id='Followers1-wrapper'>
+<div style='margin-right:2px;'>
+<div><script type="text/javascript" src="https://apis.google.com/js/platform.js"></script>
+<div id="followers-iframe-container"></div>
+<script type="text/javascript">
+    window.followersIframe = null;
+    function followersIframeOpen(url) {
+      gapi.load("gapi.iframes", function() {
+        if (gapi.iframes && gapi.iframes.getContext) {
+          window.followersIframe = gapi.iframes.getContext().openChild({
+            url: url,
+            where: document.getElementById("followers-iframe-container"),
+            messageHandlersFilter: gapi.iframes.CROSS_ORIGIN_IFRAMES_FILTER,
+            messageHandlers: {
+              '_ready': function(obj) {
+                window.followersIframe.getIframeEl().height = obj.height;
+              },
+              'reset': function() {
+                window.followersIframe.close();
+                followersIframeOpen("https://www.blogger.com/followers.g?blogID\x3d1470536021193321646\x26colors\x3dCgt0cmFuc3BhcmVudBILdHJhbnNwYXJlbnQaByMyMjIyMjIiByNjYzY2MTEqByNmZmZmZmYyByMwMDAwMDA6ByMyMjIyMjJCByNjYzY2MTFKByM5OTk5OTlSByNjYzY2MTFaC3RyYW5zcGFyZW50\x26pageSize\x3d21\x26postID\x3d7325465026216084230\x26origin\x3dhttps://www.coachdevops.com/");
+              },
+              'open': function(url) {
+                window.followersIframe.close();
+                followersIframeOpen(url);
+              },
+              'blogger-ping': function() {
+              }
+            }
+          });
+        }
+      });
+    }
+    followersIframeOpen("https://www.blogger.com/followers.g?blogID\x3d1470536021193321646\x26colors\x3dCgt0cmFuc3BhcmVudBILdHJhbnNwYXJlbnQaByMyMjIyMjIiByNjYzY2MTEqByNmZmZmZmYyByMwMDAwMDA6ByMyMjIyMjJCByNjYzY2MTFKByM5OTk5OTlSByNjYzY2MTFaC3RyYW5zcGFyZW50\x26pageSize\x3d21\x26postID\x3d7325465026216084230\x26origin\x3dhttps://www.coachdevops.com/");
+  </script></div>
+</div>
+</div>
+<div class='clear'></div>
+</div>
+</div><div class='widget HTML' data-version='1' id='HTML2'>
+<div class='widget-content'>
+Clustrmaps
+<script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=H7GFAf6_wTOAjXKAfJ8cTEq5hErOwxGuHg0PdvnJIvk&cl=ffffff&w=a"></script>
+</div>
+<div class='clear'></div>
+</div></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='sidebar no-items section' id='sidebar-right-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='sidebar no-items section' id='sidebar-right-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class='sidebar no-items section' id='sidebar-right-3'></div>
+</aside>
+</div>
+</div>
+</div>
+<div style='clear: both'></div>
+<!-- columns -->
+</div>
+<!-- main -->
+</div>
+</div>
+<div class='main-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<footer>
+<div class='footer-outer'>
+<div class='footer-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left footer-fauxborder-left'>
+<div class='fauxborder-right footer-fauxborder-right'></div>
+<div class='region-inner footer-inner'>
+<div class='foot section' id='footer-1'><div class='widget AdSense' data-version='1' id='AdSense2'>
+<div class='widget-content'>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1222349908741615&host=ca-host-pub-1556223355139109" crossorigin="anonymous"></script>
+<!-- devopscoaching_footer-1_AdSense2_234x60_as -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:234px;height:60px"
+     data-ad-client="ca-pub-1222349908741615"
+     data-ad-host="ca-host-pub-1556223355139109"
+     data-ad-slot="3295315350"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div class='clear'></div>
+</div>
+</div></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='foot no-items section' id='footer-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='foot no-items section' id='footer-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- outside of the include in order to lock Attribution widget -->
+<div class='foot section' id='footer-3' name='Footer'><div class='widget Attribution' data-version='1' id='Attribution1'>
+<div class='widget-content' style='text-align: center;'>
+Powered by <a href='https://www.blogger.com' target='_blank'>Blogger</a>.
+</div>
+<div class='clear'></div>
+</div></div>
+</div>
+</div>
+<div class='footer-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</footer>
+<!-- content -->
+</div>
+</div>
+<div class='content-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<script type='text/javascript'>
+    window.setTimeout(function() {
+        document.body.className = document.body.className.replace('loading', '');
+      }, 10);
+  </script>
+
+<script type="text/javascript" src="https://www.blogger.com/static/v1/widgets/1671891383-widgets.js"></script>
+<script type='text/javascript'>
+window['__wavt'] = 'AOuZoY7Cxar5rAMgkhh1iLm_3KtQdRZgDw:1710467098056';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d1470536021193321646','//www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html','1470536021193321646');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '1470536021193321646', 'title': 'Coaching on DevOps and Cloud Computing', 'url': 'https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html', 'canonicalUrl': 'https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html', 'homepageUrl': 'https://www.coachdevops.com/', 'searchUrl': 'https://www.coachdevops.com/search', 'canonicalHomepageUrl': 'https://www.coachdevops.com/', 'blogspotFaviconUrl': 'https://www.coachdevops.com/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': true, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': 'UA-116463360-1', 'encoding': 'UTF-8', 'locale': 'en', 'localeUnderscoreDelimited': 'en', 'languageDirection': 'ltr', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'isDynamicViewsAvailable': true, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22Coaching on DevOps and Cloud Computing - Atom\x22 href\x3d\x22https://www.coachdevops.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22Coaching on DevOps and Cloud Computing - RSS\x22 href\x3d\x22https://www.coachdevops.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22Coaching on DevOps and Cloud Computing - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/1470536021193321646/posts/default\x22 /\x3e\n\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22Coaching on DevOps and Cloud Computing - Atom\x22 href\x3d\x22https://www.coachdevops.com/feeds/7325465026216084230/comments/default\x22 /\x3e\n', 'meTag': '', 'adsenseClientId': 'ca-pub-1222349908741615', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'adsenseHasAds': true, 'adsenseAutoAds': false, 'boqCommentIframeForm': true, 'loginRedirectParam': '', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/aae4e6dd9baa8dcc', 'plusOneApiSrc': 'https://apis.google.com/js/platform.js', 'disableGComments': true, 'interstitialAccepted': false, 'sharing': {'platforms': [{'name': 'Get link', 'key': 'link', 'shareMessage': 'Get link', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': 'Share to Facebook', 'target': 'facebook'}, {'name': 'BlogThis!', 'key': 'blogThis', 'shareMessage': 'BlogThis!', 'target': 'blog'}, {'name': 'Twitter', 'key': 'twitter', 'shareMessage': 'Share to Twitter', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': 'Share to Pinterest', 'target': 'pinterest'}, {'name': 'Email', 'key': 'email', 'shareMessage': 'Email', 'target': 'email'}], 'disableGooglePlus': true, 'googlePlusShareButtonWidth': 0, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27en\x27};\x3c/script\x3e'}, 'hasCustomJumpLinkMessage': false, 'jumpLinkMessage': 'Read more', 'pageType': 'item', 'postId': '7325465026216084230', 'postImageThumbnailUrl': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/s72-c/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png', 'postImageUrl': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/s320/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png', 'pageName': 'Deploy Springboot Microservices App into Amazon EKS Cluster using Jenkins Pipeline and Kubectl CLI Plug-in | Containerize Springboot App and Deploy into EKS Cluster using Jenkins Pipeline', 'pageTitle': 'Coaching on DevOps and Cloud Computing: Deploy Springboot Microservices App into Amazon EKS Cluster using Jenkins Pipeline and Kubectl CLI Plug-in | Containerize Springboot App and Deploy into EKS Cluster using Jenkins Pipeline'}}, {'name': 'features', 'data': {}}, {'name': 'messages', 'data': {'edit': 'Edit', 'linkCopiedToClipboard': 'Link copied to clipboard!', 'ok': 'Ok', 'postLink': 'Post Link'}}, {'name': 'template', 'data': {'name': 'custom', 'localizedName': 'Custom', 'isResponsive': false, 'isAlternateRendering': false, 'isCustom': true}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': 'Deploy Springboot Microservices App into Amazon EKS Cluster using Jenkins Pipeline and Kubectl CLI Plug-in | Containerize Springboot App and Deploy into EKS Cluster using Jenkins Pipeline', 'description': 'We will learn how to automate springboot microservices builds using Jenkins pipeline and Deploy into AWS EKS Cluster with help of Kubernetes...', 'featuredImage': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-CDo3r0LWddE5FLOq1w9K-N7MFfosRsf0jFVmr8oEdWRn4_NTHhgQ2eciSen6rghNi_rPWZ2N4BRTWxM9y10mhi5laXDIC5LrNY5sLBgqlxe08qzMsrMI_y3Np7VUschr79SeMuaBLiBZtiYRjMLJnw6LBbLdJV-pnb0_IGPd9yx0htmp2c7dgrqb/s320/Screen%20Shot%202022-09-04%20at%201.33.59%20PM.png', 'url': 'https://www.coachdevops.com/2022/01/deploy-springboot-microservices-app_11.html', 'type': 'item', 'isSingleItem': true, 'isMultipleItems': false, 'isError': false, 'isPage': false, 'isPost': true, 'isHomepage': false, 'isArchive': false, 'isLabelSearch': false, 'postId': 7325465026216084230}}]);
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar', document.getElementById('Navbar1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header', document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AdSenseView', new _WidgetInfo('AdSense1', 'crosscol', document.getElementById('AdSense1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/2897207460-lbx.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/3268905543-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_FeaturedPostView', new _WidgetInfo('FeaturedPost1', 'main', document.getElementById('FeaturedPost1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_PopularPostsView', new _WidgetInfo('PopularPosts1', 'main', document.getElementById('PopularPosts1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AdSenseView', new _WidgetInfo('AdSense3', 'sidebar-right-1', document.getElementById('AdSense3'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_PageListView', new _WidgetInfo('PageList1', 'sidebar-right-1', document.getElementById('PageList1'), {'title': 'Contact Coach', 'links': [{'isCurrentPage': false, 'href': 'https://chat.whatsapp.com/IiuhIbRmf2x5UK61U5nDHX', 'title': 'Join WhatsApp Group for Course Enquiry'}, {'isCurrentPage': false, 'href': 'https://www.coachdevops.com/2024/01/devops-bootcamp-jan-2024-schedule.html', 'title': 'DevOps Bootcamp Schedule'}, {'isCurrentPage': false, 'href': 'https://chat.whatsapp.com/I8XepvRwUDIJZxejkA8b4W', 'title': 'Troubleshooting Assistance from DevOps Coach '}, {'isCurrentPage': false, 'href': 'https://www.coachdevops.com/2019/04/devops-coaching-model-information.html', 'title': 'About the Coach \x26 Coaching Model'}, {'isCurrentPage': false, 'href': 'https://www.coachdevops.com/2023/12/devops-interview-preparation-courses.html', 'title': 'DevOps Interview Preparation Course'}], 'mobile': false, 'showPlaceholder': true, 'hasCurrentPage': false}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_ContactFormView', new _WidgetInfo('ContactForm1', 'sidebar-right-1', document.getElementById('ContactForm1'), {'contactFormMessageSendingMsg': 'Sending...', 'contactFormMessageSentMsg': 'Your message has been sent.', 'contactFormMessageNotSentMsg': 'Message could not be sent. Please try again later.', 'contactFormInvalidEmailMsg': 'A valid email address is required.', 'contactFormEmptyMessageMsg': 'Message field cannot be empty.', 'title': 'Contact here for registering to Coaching Program', 'blogId': '1470536021193321646', 'contactFormNameMsg': 'Name', 'contactFormEmailMsg': 'Email', 'contactFormMessageMsg': 'Message', 'contactFormSendMsg': 'Send', 'contactFormToken': 'AOuZoY6CdYbCmMmdQ9eiF2qAGUZ66yjoxQ:1710467098057', 'submitUrl': 'https://www.blogger.com/contact-form.do'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML1', 'sidebar-right-1', document.getElementById('HTML1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogSearchView', new _WidgetInfo('BlogSearch1', 'sidebar-right-1', document.getElementById('BlogSearch1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LabelView', new _WidgetInfo('Label1', 'sidebar-right-1', document.getElementById('Label1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_PopularPostsView', new _WidgetInfo('PopularPosts2', 'sidebar-right-1', document.getElementById('PopularPosts2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'sidebar-right-1', document.getElementById('BlogArchive1'), {'languageDirection': 'ltr', 'loadingMessage': 'Loading\x26hellip;'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_ProfileView', new _WidgetInfo('Profile1', 'sidebar-right-1', document.getElementById('Profile1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_FollowersView', new _WidgetInfo('Followers1', 'sidebar-right-1', document.getElementById('Followers1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML2', 'sidebar-right-1', document.getElementById('HTML2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AdSenseView', new _WidgetInfo('AdSense2', 'footer-1', document.getElementById('AdSense2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AttributionView', new _WidgetInfo('Attribution1', 'footer-3', document.getElementById('Attribution1'), {}, 'displayModeFull'));
+</script>
+</body>
+</html>
