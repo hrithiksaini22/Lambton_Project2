@@ -19,3 +19,4 @@ yarn start OR npm start
 1) install jenkins on an ec2 instance using jenkins docker image
 2) attach docker.sock file when launching the jenkins container and give permission 666 for the container user to access the docker.sock file. This enables the container to run docker inside itself by accessig the docker daemon installed on the host machine.
 3) allow the port 8080, 22 on your Jenkins EC2 instance
+4) 
